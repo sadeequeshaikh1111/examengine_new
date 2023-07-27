@@ -1,0 +1,232 @@
+body {
+    font-family: Arial;
+    color:#111;
+    
+  }
+  
+  .split {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 0px;
+  }
+ 
+  
+  .left {
+    left: 0;
+    background-color: rgb(255, 255, 255);
+    width: 20%;
+   /* border-style: outset;*/
+    position: absolute;
+    font-size: 12;
+
+
+  }
+  
+  .right {
+    right: 0;
+    background-color: rgb(255, 255, 255);
+    width: 80%;
+
+  }
+  
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 12;
+    transform: translate(-50%, -50%);
+  }
+  
+  .centeredimg {
+    
+    height: 100px;
+    width: 150px;
+    text-align: center;
+    margin: auto;
+
+
+  }
+  .infodiv
+  {
+    height: 35%;
+    font-size: 12px;
+  /*  border-style: groove;     */
+
+  }
+ /* .questiondiv
+  {
+    height: 40%;
+    overflow: scroll;
+ background-color: #4CAF50; 
+
+/*    border-style: groove;    
+  }*/
+  .button {
+ background-color: #4c4eaf; 
+ margin-left: 5px;
+ margin-right: 2px;
+ margin-top: 3px;
+ width: 35px;
+ height: 30px;
+ }
+ .visited_unanswered_button {
+  background-color: #af4c6d; 
+  margin-left: 5px;
+  margin-right: 2px;
+  margin-top: 3px;
+  width: 35px;
+  height: 30px;
+  }
+  .visited_answered_button
+  {
+    background-color: #4caf59; 
+    margin-left: 5px;
+    margin-right: 2px;
+    margin-top: 3px;
+    width: 35px;
+    height: 30px;
+  }
+  .visited_answered_button_marked
+  {
+    background-color: #774caf; 
+    margin-left: 5px;
+    margin-right: 2px;
+    margin-top: 3px;
+    width: 35px;
+    height: 30px;
+  }
+  .save_next_btn_inst
+  {
+    background-color: #4c87af; 
+    margin-left: 5px;
+    margin-right: 2px;
+    margin-top: 3px;
+    width: 70px;
+    height: 30px;
+  }
+.button1 {border-radius: 2px;}
+.button2 {border-radius: 4px;}
+.button3 {border-radius: 8px;
+  background-color: #4e4caf; /* Green */
+
+
+}
+.button4 {border-radius: 12px;}
+.button5 {border-radius: 50%;}
+.QuestionPanel_Nav
+{
+  overflow: scroll;
+
+  
+}
+.questiondiv{
+  height: auto;
+  
+ /* border-style: outset;*/
+bottom: 0px;
+
+  text-align: left;
+  min-height: 10%;
+  overflow-y: scroll;
+    max-height: 45%;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  font-size: 1.5vw;
+
+
+
+}
+.gapdiv{
+  height: 2%;
+}
+.optiondiv{
+  height: 7%;
+ /* border-style: outset;*/
+}
+.tools{
+  height: 5%;
+  border-style: outset;
+  align-items:right;
+text-align: right;
+}
+.submitdiv{
+  height: 10%;
+  border-style: outset;
+}
+.Response_panel_1
+{
+  height: auto;
+  border-style: outset;
+
+
+}
+.top_div
+{
+text-align: right;
+}
+.question_img
+{
+
+  text-align: right;
+
+}
+
+/* Css for content tab subjects    */
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 12px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.timercss_normal
+{
+  font-size: large;
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+
+}
+.timercss_at_end
+{
+  font-size: large;
+  margin: auto;
+  width: 50%;
+  border: 3px solid rgb(177, 13, 34);
+  padding: 10px;
+
+}

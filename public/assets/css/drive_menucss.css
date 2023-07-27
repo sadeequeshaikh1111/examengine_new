@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+  }
+  
+    
+  .column {
+    float: left;
+    width: 30%;
+    padding: 10px;
+    height: 350px; 
+  }
+  .columntbl {
+    float: left;
+    width: 70%;
+    padding: 10px;
+    height: 350px; 
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
