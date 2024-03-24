@@ -17,7 +17,7 @@
   </head>
   <body>
     <div class="container">
-      <header>Login Form</header>
+      <header>Candidate Login Form </header>
       <form action="" method="post">
         <div class="input-field">
           <input type="text" required>
