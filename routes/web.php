@@ -197,6 +197,16 @@ Route::get('/verification_desk', function () {
     return view('admin.admin_login');
     }
 });
+//Backup config route
+Route::get('/Backup_config', function () {
+    if(session()->has('user'))
+    {return view('admin.Backup_config');
+    }
+    else
+    {
+    return view('admin.admin_login');
+    }
+});
 //mock menu
 Route::get('/mock_menu', function () {
     if(session()->has('user'))

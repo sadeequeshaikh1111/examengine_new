@@ -113,6 +113,12 @@ Dashboard                <i class="right fas fa-angle-left"></i>
                 </a>
               </li>
               <li class="nav-item">
+                <a href="Backup_config" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Backup Configuration</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="mock_menu" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Mock data</p>
