@@ -581,4 +581,46 @@ public function end_test(Request $request)
 return view("submitted_page",compact('data','drive','feedback'));
 }
 
+public function submitFeedback(Request $request)
+    {
+        // Retrieve the registration number from the request
+    $reg_no = $request->input('reg_no');
+
+    // Retrieve the candidate based on the registration number
+    $candidate = Candidate::where('reg_no', $reg_no)->first();
+
+    if (!$candidate) {
+        return "Candidate not found!";
+    }
+
+    // Get all input data from the request and exclude the token
+    $data = $request->except('_token'); // This will remove the _token field
+
+    // Define the values to be replaced and their corresponding numeric values
+    $replacePairs = [
+        'Very Good' => 5,
+        'Good' => 4,
+        'Ok' => 3,
+        'Bad' => 2,
+        'Very Bad' => 1,
+    ];
+
+    // Convert the data to a string (for example, using json_encode to stringify the whole array)
+    $dataString = json_encode($data);
+
+    // Replace string values with corresponding numeric values
+    $dataString = str_replace(array_keys($replacePairs), array_values($replacePairs), $dataString);
+
+    // Store the updated data string in the candidate_feedback column
+    $candidate->candidate_feedback = $dataString;
+    $candidate->save();
+
+    // Return a success message
+    return "Thank you for your Feedback. Your examination has been submitted.";
+
+        
+    }
+
+
+
 }

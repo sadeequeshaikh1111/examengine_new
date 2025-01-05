@@ -55,131 +55,45 @@
     <br>
     Please fill following feedback so that we can improve your exam experience 
 </div>
+<form action="{{ route('submitFeedback') }}" method="POST">
+    @csrf
+    <!-- Add Hidden Input for Registration Number -->
+    <input type="hidden" name="reg_no" id="hidden_reg_no" value="{{ $data['reg_no'] }}">
+   {{$i=0}} 
+    @foreach($feedback as $feed)
+{{$i=$i+1}}
+    <fieldset style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
+        <legend>{{ $feed['parameter'] }}</legend>
+        <div>
+            <input type="radio" name="P{{$i}}" id="option1_{{ $feed['id'] }}" value="{{ $feed['option1'] }}">
+            <label for="option1_{{ $feed['Id'] }}">{{ $feed['option1'] }}</label>
+        </div>
+        <div>
+            <input type="radio" name="P{{$i}}" id="option2_{{ $feed['id'] }}" value="{{ $feed['option2'] }}">
+            <label for="option2_{{ $feed['Id'] }}">{{ $feed['option2'] }}</label>
+        </div>
+        <div>
+            <input type="radio" name="P{{$i}}" id="option3_{{ $feed['id'] }}" value="{{ $feed['option3'] }}">
+            <label for="option3_{{ $feed['Id'] }}">{{ $feed['option3'] }}</label>
+        </div>
+        <div>
+            <input type="radio" name="P{{$i}}" id="option4_{{ $feed['id'] }}" value="{{ $feed['option4'] }}">
+            <label for="option4_{{ $feed['Id'] }}">{{ $feed['option4'] }}</label>
+        </div>
+        <div>
+            <input type="radio" name="P{{$i}}" id="option5_{{ $feed['id'] }}" value="{{ $feed['option5'] }}">
+            <label for="option5_{{ $feed['Id'] }}">{{ $feed['option5'] }}</label>
+        </div>
+    </fieldset>
+    @endforeach
+    <button type="submit" class="btn btn-primary">Submit Feedback & Exit</button>
+</form>
 
-<div id="feedback_div">
-@foreach($feedback as $feed)
-<div>
-{{$feed['parameter']}}
-<div><input type="radio" name={{$feed['id']}} id="">{{$feed['option1']}}</input></div>
-<div><input type="radio" name={{$feed['id']}} id="">{{$feed['option2']}}</input></div>
-<div><input type="radio" name={{$feed['id']}} id="">{{$feed['option3']}}</input></div>
-<div><input type="radio" name={{$feed['id']}} id="">{{$feed['option4']}}</input></div>
-<div><input type="radio" name={{$feed['id']}} id="">{{$feed['option5']}}</input></div>
 
-</div>
 
-@endforeach
-</div>
-
-</div>
 
 
 
 </body>
-<script type="text/javascript">
-$( document ).ready(function() {
-  str=document.getElementById("Lang").value();
-  {document.getElementById("start_exam_btn").disabled = true;}
 
-  });
-function Enable_btn()
-{    checkval1 = $("input[id='instructions_cb']:checked").val();
-if(checkval1==1)
-{document.getElementById("start_exam_btn").disabled = false;}
-else{document.getElementById("start_exam_btn").disabled = true;}
-  
-
-}
-function get_instructions(str)
-{
-  type="Instruction";
-  lang=str;
-  $.ajax({  //create an ajax request to display.php
-        type: "GET",
-        url: "getinstructions/"+type+"/"+lang,        
-        success: function (data) { 
-          $('#nav_instruction_div').empty();
-          $('#instruction_div').empty();
-          $('#terms_div').empty();
-          $('#TAC').empty();
-          $('#lang_div').empty();
-
-          $.each(data, function(i, data) {
-    if (data.Instruction_type=='Navigation') {
-
-        console.log(data.Instruction_matter);
-        
-        if(data.component==1)
-        {
-          $('#nav_instruction_div').append('<span>').append('<button class=button>1</button>').append('</span>')  
-        }
-        if(data.component==2)
-        {
-          $('#nav_instruction_div').append('<span>').append('<button class=visited_answered_button>1</button>').append('</span>')  
-        }
-        if(data.component==3)
-        {
-          $('#nav_instruction_div').append('<span>').append('<button class=visited_unanswered_button>1</button>').append('</span>')  
-        }
-        if(data.component==4)
-        {
-          $('#nav_instruction_div').append('<span>').append('<button class=visited_answered_button_marked>1</button>').append('</span>')  
-        }
-        if(data.component==5)
-        {
-          $('#nav_instruction_div').append('<span>').append('<button class=btn-primary btn-block>Save & Next</button>').append('</span>')  
-        }
-        $('#nav_instruction_div').append('<span>').append(data.Instruction_matter).append('</span><br>')
-        
-    }
-    if (data.Instruction_type=='Instruction') {
-        console.log(data.Instruction_matter);
-        $('#instruction_div').append('<div>').append(data.Instruction_matter).append('</div>')
-        if(data.component=="Brief")
-        {
-          $('#instruction_div').append('<span>').append('&nbsp <button class=btn-primary btn-block>Previous</button>').append('</span>')  
-          $('#instruction_div').append('<span>').append('&nbsp <button class=btn-primary btn-block>Save & Next</button>').append('</span>')  
-          $('#instruction_div').append('<span>').append('&nbsp <button class=btn-primary btn-block>Mark For Review</button>').append('</span>')  
-          $('#instruction_div').append('<span>').append('&nbsp <button class=btn-primary btn-block>Clear Response</button>').append('</span>')  
-
-        }
-
-    }
-    if (data.Instruction_type=='Language') {
-        console.log(data.Instruction_matter);
-        $('#lang_div').append('<div>').append(data.Instruction_matter).append('</div>')
-    }
-    if (data.Instruction_type=='Terms') {
-        console.log(data.Instruction_matter);
-        $('#terms_div').append('<div>').append(data.Instruction_matter).append('</div>')
-    }
-    if (data.Instruction_type=='T&C') {
-        console.log(data.Instruction_matter);
-        $('#TAC').append('<div>').append(data.Instruction_matter).append('</div>')
-    }
-
-});
-
-       }
-    });
-
-
-}
-
-function get_time_new()
-{   
-
- 
-  
-}
-
-function instruction_langSelect(str)
-{alert('instruction language changed to '+str);
-  get_instructions(str);
-
-}
-
-function qp_langSelect(str)
-{alert('qp language changed to '+str);}
-</script>
 </html>

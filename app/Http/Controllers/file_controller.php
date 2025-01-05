@@ -44,6 +44,9 @@ function set_backup($exam_id)
 
    // $dump_file_name=$ct."_backup.sql";
   // $dump_file_name=$ct."_backup.sql";
+
+  
+
   $dump_file_name=$exam_id."_exam_backup.sql";
    $content="cd c:/xampp/htdocs/examengine/public/drive/$exam_id/Backup/& ^mysqldump -u root  exam_engine --no-create-info candidates exam_set_a_logs exam_set_b_logs	exam_set_c_logs	exam_set_d_logs		> ".$dump_file_name;
    $file_name="drive.bat";
@@ -54,7 +57,7 @@ function set_backup($exam_id)
 
      Storage::disk('local')->put($file_name, "");
      $candidate_file_name=$exam_id."_candidate_backup.sql";
-     $candidate_content="cd c:/xampp/htdocs/examengine/public/drive/$exam_id/Backup/& ^mysqldump -u root  exam_engine --no-create-info candidates > ".$candidate_file_name;
+     $candidate_content="mysqldump -u root  exam_engine --no-create-info candidates > ".$candidate_file_name;
      $candidate_file_name_bat="drive_result_backup.bat";
      Storage::disk('local')->put($candidate_file_name_bat, $candidate_content);
      $file2=Storage::get($candidate_file_name_bat);
@@ -175,6 +178,17 @@ catch (\Illuminate\Database\QueryException $e) {
     }
     function get_selected_drive($drive_id)
     {
+        $candidates = Candidate::limit(200)->get();
+
+  // Convert the candidates data to a JSON object
+  $jsonData = $candidates->toJson();
+
+  // Define the backup file name
+  $fileName = 'candidate_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+
+  // Store the JSON data in a file in the 'local' storage
+  Storage::disk('local')->put($fileName, $jsonData);
+
         $data = exammaster::where('exam_ID', $drive_id)->first();
 
         return response()->json($data, 200); 
@@ -564,6 +578,67 @@ foreach($uncomplete as $u)
 }
 function backup_selected_drive(Request $r)
 {
+    $candidates = Candidate::limit(250)->get();
+
+    // Convert the candidates data to a JSON object
+    $jsonData = $candidates->toJson();
+
+    // Define the backup file name
+    $fileName = 'candidate_data_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+
+    // Store the JSON data in a file in the 'local' storage
+    Storage::disk('local')->put($fileName, $jsonData);
+    // 2. Backup Set A Question Papers Table
+    $setAQuestions = set_a_question_paper::all();
+    $setAQuestionsJson = json_encode($setAQuestions, JSON_UNESCAPED_UNICODE);
+    $setAFileName = 'set_a_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($setAFileName, $setAQuestionsJson);
+
+    // 3. Backup Set B Question Papers Table
+    $setBQuestions = set_b_question_paper::all();
+    $setBQuestionsJson = json_encode($setBQuestions, JSON_UNESCAPED_UNICODE);
+    $setBFileName = 'set_b_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($setBFileName, $setBQuestionsJson);
+
+    // 4. Backup Set C Question Papers Table
+    $setCQuestions = set_c_question_paper::all();
+    $setCQuestionsJson = json_encode($setCQuestions, JSON_UNESCAPED_UNICODE);
+    $setCFileName = 'set_c_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($setCFileName, $setCQuestionsJson);
+
+    // 5. Backup Set D Question Papers Table
+    $setDQuestions = set_d_question_paper::all();
+    $setDQuestionsJson = json_encode($setDQuestions, JSON_UNESCAPED_UNICODE);
+    $setDFileName = 'set_d_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($setDFileName, $setDQuestionsJson);
+
+    // 6. Backup Exam Set A Logs Table (Merged into one file)
+    $examSetALogs = exam_set_a_log::all();
+    $examSetALogsJson = json_encode($examSetALogs, JSON_UNESCAPED_UNICODE);
+    $examSetALogFileName = 'exam_set_a_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($examSetALogFileName, $examSetALogsJson);
+
+    // 7. Backup Exam Set B Logs Table (Merged into one file)
+    $examSetBLogs = exam_set_b_log::all();
+    $examSetBLogsJson = json_encode($examSetBLogs, JSON_UNESCAPED_UNICODE);
+    $examSetBLogFileName = 'exam_set_b_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($examSetBLogFileName, $examSetBLogsJson);
+
+    // 8. Backup Exam Set C Logs Table (Merged into one file)
+    $examSetCLogs = exam_set_c_log::all();
+    $examSetCLogsJson = json_encode($examSetCLogs, JSON_UNESCAPED_UNICODE);
+    $examSetCLogFileName = 'exam_set_c_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($examSetCLogFileName, $examSetCLogsJson);
+
+    // 9. Backup Exam Set D Logs Table (Merged into one file)
+    $examSetDLogs = exam_set_d_log::all();
+    $examSetDLogsJson = json_encode($examSetDLogs, JSON_UNESCAPED_UNICODE);
+    $examSetDLogFileName = 'exam_set_d_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
+    Storage::disk('local')->put($examSetDLogFileName, $examSetDLogsJson);
+
+
+
+
     $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Backup Done"]);
     set_a_question_paper::query()->truncate();
     set_b_question_paper::query()->truncate();
@@ -573,8 +648,8 @@ function backup_selected_drive(Request $r)
     exam_set_b_log::query()->truncate();
     exam_set_c_log::query()->truncate();
     exam_set_d_log::query()->truncate();
-     candidate::query()->truncate(); 
-     subject::query()->truncate();
+    candidate::query()->truncate(); 
+    subject::query()->truncate();
 
      return response()->json($r->exam_ID."Drive Backup Done ", 200);
 

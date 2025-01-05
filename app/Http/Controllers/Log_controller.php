@@ -175,30 +175,35 @@ else{        $logs=exam_set_a_log::where('reg_no',$reg_no)->get();}
         if($data->qpset=='A')
         {$marks = DB::table('exam_set_a_logs')->where('reg_no', '=',$reg_no)->sum('points'); 
           $data =Candidate::where('reg_no',$request->reg_no)->update(array_merge($request->all(), ['marks' => $marks],['status'=>"submited"]));
-          return "reg number ".$reg_no."exam ended marks ".$marks;
 
         }
         else if($data->qpset=='B')
         {$marks = DB::table('exam_set_b_logs')->where('reg_no', '=',$reg_no)->sum('points'); 
           $data =Candidate::where('reg_no',$request->reg_no)->update(array_merge($request->all(), ['marks' => $marks]));
-          return "reg number ".$reg_no."exam ended marks ".$marks;
 
         }
         else if($data->qpset=='C')
         {   
           $marks = DB::table('exam_set_c_logs')->where('reg_no', '=',$reg_no)->sum('points'); 
           $data =Candidate::where('reg_no',$request->reg_no)->update(array_merge($request->all(), ['marks' => $marks]));
-          return "reg number ".$reg_no."exam ended marks ".$marks;
 
         }
        else{$marks = DB::table('exam_set_d_logs')->where('reg_no', '=',$reg_no)->sum('points');
         $data =Candidate::where('reg_no',$request->reg_no)->update(array_merge($request->all(), ['marks' => $marks]));
-        return "reg number ".$reg_no."exam ended marks ".$marks;
 
       }
         
         //     return response()->json($candidate, 200); 
-        return "reg number ".$reg_no."exam ended marks ".$marks;
+
+        $showResult = env('SHOW_RESULT', 0);
+        if($showResult==1)
+        {
+          return "reg number ".$reg_no."exam ended marks ".$marks;
+        }
+       else
+       {
+        return "Exam Submitted Thank you";
+       }
             
       }
       

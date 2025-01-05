@@ -263,3 +263,5 @@ Route::post('upload_drive', [App\Http\Controllers\file_controller::Class, 'uploa
 Route::post('upload',[App\Http\Controllers\file_controller::Class,'store_drive']);//post file names
 Route::post('uploadlink',[App\Http\Controllers\file_controller::Class,'store_drive_link']);//post file names
 Route::post('create_qp_sets',[App\Http\Controllers\candidate_controller::Class,'create_qp_sets'])->name('create_qp_sets.post'); ;//create mock qp data
+//submit feedback
+Route::post('submitFeedback', [App\Http\Controllers\candidate_controller::class, 'submitFeedback'])->name('submitFeedback');

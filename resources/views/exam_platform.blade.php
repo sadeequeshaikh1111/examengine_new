@@ -100,7 +100,7 @@ GetQuestion </div>
 </div>
 <div id="cendexam"><button onclick="getConfirmation()">End Exam</button></div>
 <div>
-      <form action="end_test" method="post">
+      <form name="end_test_form" action="end_test" method="post">
 
       @csrf
       <input type="hidden" name="reg_no" id="reg_no" value={{$data['reg_no']}}></iput>
@@ -493,8 +493,7 @@ function langSelect()
 }
   function submit_exam()
   {
-
-    var Sqn=qn_lbl.textContent;
+  var Sqn=qn_lbl.textContent;
   var reg_no = $("#reg_no").text();
   $.ajax({
      type:'POST',
@@ -502,7 +501,10 @@ function langSelect()
      data:{reg_no:reg_no},
      success:function(data){
        alert(data);
-       document.write ("<br>"+data);
+       
+       document.forms['end_test_form'].submit();
+
+     
 
      },  error: function(xhr, status, error){
          var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -535,8 +537,6 @@ return deadtime;
                var retVal = confirm("Do you want to Submit ?");
                if( retVal == true ) {
                 submit_exam();
-
-                  document.write ("User has Submitted the exam\n");
 
                   return true;
                } else {

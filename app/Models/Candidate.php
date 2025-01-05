@@ -9,6 +9,6 @@ class Candidate extends Model
 {
     use HasFactory;
     protected $primaryKey = "reg_no";
-    protected $fillable = ['status','time','marks'];
+    protected $fillable = ['status','time','marks','candidate_feedback'];
 
 }
