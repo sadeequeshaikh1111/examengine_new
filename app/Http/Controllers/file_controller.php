@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use File;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\exammaster;
 use Carbon\Carbon;
@@ -21,7 +20,8 @@ use App\Models\exam_set_a_log;
 use App\Models\exam_set_b_log;
 use App\Models\exam_set_c_log;
 use App\Models\exam_set_d_log;
-
+use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use Exception;
 
 class file_controller extends Controller
@@ -163,12 +163,12 @@ catch (\Illuminate\Database\QueryException $e) {
     }
     function get_todays_drive()
     {
-        $data = exammaster::where('Drive_status', 'not like', "complete")->get();
+        $data = exammaster::where('drive_status', 'not like', "complete")->get();
 
         return DataTables::of($data)
                 ->addColumn('action', function($data){
                   
-                    $button = '<button type="button" name="time" id='.$data->exam_ID.' class="edit btn btn-primary btn-sm"  onclick=select_drive(this.id)>Select </button> ';
+                    $button = '<button type="button" name="time" id='.$data->exam_id.' class="edit btn btn-primary btn-sm"  onclick=select_drive(this.id)>Select </button> ';
 
                     return $button;
                 })
@@ -189,7 +189,7 @@ catch (\Illuminate\Database\QueryException $e) {
   // Store the JSON data in a file in the 'local' storage
   Storage::disk('local')->put($fileName, $jsonData);
 
-        $data = exammaster::where('exam_ID', $drive_id)->first();
+        $data = exammaster::where('exam_id', $drive_id)->first();
 
         return response()->json($data, 200); 
 
@@ -197,7 +197,7 @@ catch (\Illuminate\Database\QueryException $e) {
     
     function select_drive($drive_id)
     {
-        $data = exammaster::where('exam_ID', $drive_id)->first();
+        $data = exammaster::where('exam_id', $drive_id)->first();
         return response()->json($data, 200); 
 
 
@@ -206,30 +206,30 @@ function start_selected_drive(Request $r)
 {
    if($r->status=="Not Started")
     {
-    $count = exammaster::where('Drive_status','=','running')->orwhere('Drive_status','=','Drive Ended')->count();
+    $count = exammaster::where('drive_status','=','running')->orwhere('drive_status','=','Drive Ended')->count();
 if($count!=0)
 {
-$rd=exammaster::where('Drive_status','=','running')->orwhere('Drive_status','=','Drive Ended')->first();
-    return response()->json($r->exam_ID." is already still Running Please End Running Drive and Complete Back up process first then start next drive");
+$rd=exammaster::where('drive_status','=','running')->orwhere('drive_status','=','Drive Ended')->first();
+    return response()->json($r->exam_id." is already still Running Please End Running Drive and Complete Back up process first then start next drive");
 
 }
    else{
-    $rd=exammaster::where('exam_ID',$r->exam_ID)->first();
+    $rd=exammaster::where('exam_id',$r->exam_id)->first();
     $drive_status="running";
-    $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"running"]);
+    $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"running"]);
 
-    return response()->json($r->exam_ID." drive started", 200);
+    return response()->json($r->exam_id." drive started", 200);
 }
 }
 else if($r->status=="Drive End"){   
-     $rd=exammaster::where('exam_ID',$r->exam_ID)->first();
-     $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Drive Ended"]);
-     return response()->json($r->exam_ID." drive Ended", 200);
+     $rd=exammaster::where('exam_id',$r->exam_id)->first();
+     $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Drive Ended"]);
+     return response()->json($r->exam_id." drive Ended", 200);
 
 }
 else if($r->status=="Backup Done"){
 
-    $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Backup Done"]);
+  /*  $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Backup Done"]);
     set_a_question_paper::query()->truncate();
     set_b_question_paper::query()->truncate();
     set_c_question_paper::query()->truncate();
@@ -242,60 +242,59 @@ else if($r->status=="Backup Done"){
 
      exam_question::query()->truncate();
      candidate::query()->truncate(); 
-     return response()->json($r->exam_ID." Backup Done", 200);
+     return response()->json($r->exam_id." Backup Done", 200);*/
+     return response()->json($r->exam_id." Backup Done", 200);
 
 }
 else if($r->status=="set_qp"){
    
 
-    DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_ID.'/'.$r->exam_ID.'_candidates.sql')));
+    DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql')));
 
-  $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"set_qp"]);
-    return response()->json($r->exam_ID."Question paper sets created", 200);
+  $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"set_qp"]);
+    return response()->json($r->exam_id."Question paper sets created", 200);
 }
 else
-{ini_set('max_execution_time', '300');
-//https://www.itsolutionstuff.com/post/how-to-send-email-with-attachment-in-laravelexample.html
-// above code to send mail
-//below code to send mail
-     
-        $data["email"] = "sadiktamboli57@gmail.com";
-        $data["title"] = "From arrocorp.com";
-        $data["body"] = "This is Demo";
-        $files = [
-       public_path('drive/'.$r->exam_ID.'/backup'.'/'.$r->exam_ID.'_candidate_backup.sql'),
-           // public_path('RRB_10100404212_backup.sql'),
-
-        ];
+{
+    $files = ["candidates", "exam_set_a_logs", "exam_set_b_logs","exam_set_c_logs","exam_set_d_logs"];
   
-        Mail::send('admin.drive_menu', $data, function($message)use($data, $files) {
-            $message->to($data["email"], $data["email"])
-                    ->subject($data["title"]);
-                 //   $message->attach('\public\drive'.$r->exam_ID);
+   $resp1 = $this->upload_drive($r,"candidates");
+   $resp2=$this->upload_drive($r,"exam_set_a_logs");
+   $resp3=$this->upload_drive($r,"exam_set_b_logs");
+   $resp4=$this->upload_drive($r,"exam_set_c_logs");
+   $resp5=$this->upload_drive($r,"exam_set_d_logs");
+        $consolidated = [
+        'candidates'      => $resp1,
+        'exam_set_a_logs' => $resp2,
+        'exam_set_b_logs' => $resp3,
+        'exam_set_c_logs' => $resp4,
+        'exam_set_d_logs' => $resp5,
+    ];
 
-            foreach ($files as $file){
-                $message->attach($file);
-            }
-            
-        });
-//mail sending code ended
-    $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Upload Done"]);
-    return response()->json($r->exam_ID." Upload Done", 200);
+        $exam = exammaster::where('exam_id', $r->exam_id)->first();
+    $exam->drive_status="Upload Done";
+    $exam->save();
+       return response()->json([
+        'exam_id' => $r->exam_id,
+        'results' => $consolidated
+    ]);
+
+    return response()->json($r->exam_id." Upload Done", 200);
 
 }
 
 }
 function shuffle_qp_sets(Request $r)
 {
-  /* $a =exammaster::where('exam_ID',$r->exam_ID)->first();
+  /* $a =exammaster::where('exam_id',$r->exam_id)->first();
     if($a->Drive_type=="1")
    { 
     try {   if($r->set=="1")
     {
         set_a_question_paper::query()->truncate(); 
-        DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_ID.'/'.$r->exam_ID.'_candidates.sql')));
+        DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql')));
 
-    DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_ID.'/qp'.'/'.$r->exam_ID.'_Qp.sql')));
+    DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/qp'.'/'.$r->exam_id.'_Qp.sql')));
     set_b_question_paper::query()->truncate(); 
         return "set a created";
     }
@@ -537,24 +536,24 @@ catch(NotFoundHttpException $ex)
 
 }*/
 
-$count = exammaster::where('Drive_status','=','running')->orwhere('Drive_status','=','Drive Ended')->orwhere('Drive_status','=','set_qp')->count();
+$count = exammaster::where('drive_status','=','running')->orwhere('drive_status','=','Drive Ended')->orwhere('drive_status','=','set_qp')->count();
 if($count!=0)
 {
-$rd=exammaster::where('Drive_status','=','running')->orwhere('Drive_status','=','Drive Ended')->orwhere('Drive_status','=','set_qp')->first();
-    return response()->json($r->exam_ID." is already started Please End Running Drive and Complete Back up process first then start next drive");
+$rd=exammaster::where('drive_status','=','running')->orwhere('drive_status','=','Drive Ended')->orwhere('drive_status','=','set_qp')->first();
+    return response()->json($r->exam_id." is already started Please End Running Drive and Complete Back up process first then start next drive");
 
 }
-DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_ID.'/'.$r->exam_ID.'_candidates.sql')));
-DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_ID.'/qp'.'/'.$r->exam_ID.'_Qp.sql')));
-$data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Question Bank Set"]);
-return response()->json($r->exam_ID."Question paper sets created", 200);
+DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql')));
+DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/qp'.'/'.$r->exam_id.'_Qp.sql')));
+$data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Question Bank Set"]);
+return response()->json($r->exam_id."Question paper sets created", 200);
 }
 function start_drive(Request $r)
 {
-    $rd=exammaster::where('exam_ID',$r->exam_ID)->first();
+    $rd=exammaster::where('exam_id',$r->exam_id)->first();
     $drive_status="running";
-    $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"running"]);
-    return response()->json($r->exam_ID." drive started", 200);
+    $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"running"]);
+    return response()->json($r->exam_id." drive started", 200);
 
 }
 function end_drive(Request $r)
@@ -567,22 +566,49 @@ foreach($uncomplete as $u)
 {
     $list=$list." ".$u->reg_no;
 }
-    return response()->json($r->exam_ID." drive cant be Ended all candidates havent completed or some candidates  are locked".$list, 200);
+    return response()->json($r->exam_id." drive cant be Ended all candidates havent completed or some candidates  are locked".$list, 200);
 
 }
 
-    $rd=exammaster::where('exam_ID',$r->exam_ID)->first();
-     $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Drive Ended"]);
-     return response()->json($r->exam_ID." drive Ended", 200);
+    $rd=exammaster::where('exam_id',$r->exam_id)->first();
+    $rd->drive_status = 'Drive Ended';
+    $rd->save();
+    #$data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Drive Ended"]);
+    #$data->save();
+    $drive_details=exammaster::where('exam_id',$r->exam_id)->first();
+    return response($drive_details);
+
+    #return response()->json($r->exam_id." drive Ended", 200);
 
 }
 function backup_selected_drive(Request $r)
-{
-    $candidates = Candidate::limit(250)->get();
+/*old code{
+   # return candidate::all();
+       $backup = [
+                'timestamp' => now()->toDateTimeString(),
+                'candidates' => DB::table('candidates')->get(),
+                'set_a_logs' => DB::table('exam_set_a_logs')->get(),
+                'set_b_logs' => DB::table('exam_set_b_logs')->get(),
+                'set_c_logs' => DB::table('exam_set_c_logs')->get(),
+                'set_d_logs' => DB::table('exam_set_d_logs')->get(),
+            ];
+            $fileName= $r->exam_id."Backup";
+
+            Storage::disk('local')->put($fileName, json_encode($backup, JSON_PRETTY_PRINT));
+             return response()->json([
+                'message' => '✅ Full backup completed successfully',
+                'file' => $fileName,
+                'record_counts' => [
+                    'candidates' => count($backup['candidates']),
+                    'set_a_logs' => count($backup['set_a_logs']),
+                    'set_b_logs' => count($backup['set_b_logs']),
+                    'set_c_logs' => count($backup['set_c_logs']),
+                    'set_d_logs' => count($backup['set_d_logs']),
+                ]
+            ]);
 
     // Convert the candidates data to a JSON object
     $jsonData = $candidates->toJson();
-
     // Define the backup file name
     $fileName = 'candidate_data_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
 
@@ -639,7 +665,7 @@ function backup_selected_drive(Request $r)
 
 
 
-    $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Backup Done"]);
+    $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Backup Done"]);
     set_a_question_paper::query()->truncate();
     set_b_question_paper::query()->truncate();
     set_c_question_paper::query()->truncate();
@@ -651,11 +677,58 @@ function backup_selected_drive(Request $r)
     candidate::query()->truncate(); 
     subject::query()->truncate();
 
-     return response()->json($r->exam_ID."Drive Backup Done ", 200);
+     return response()->json($r->exam_id."Drive Backup Done ", 200);
 
-}
-function upload_drive(Request $r)
+}*/
 {
+    $examId = $r->exam_id;
+
+    if (!$examId) {
+        return response()->json(['error' => 'exam_id required'], 400);
+    }
+
+    $folderPath = "backups/$examId";
+    Storage::makeDirectory($folderPath);
+
+    // Define all tables to backup
+    $tables = [
+        'candidates',
+        'exam_set_b_logs',
+        'exam_set_c_logs',
+        'exam_set_a_logs',
+        'exam_set_d_logs'
+    ];
+
+    foreach ($tables as $table) {
+        $data = DB::table($table)->get();
+
+        $metadata = [
+            '__metadata__' => [
+                'exam_id' => $examId,
+                'source_table' => $table,
+                'record_count' => $data->count(),
+                'generated_at' => Carbon::now()->toDateTimeString(),
+                'backup_by' => auth()->user()->name ?? 'system'
+            ]
+        ];
+
+        // Combine data + metadata
+        $backupData = $data->toArray();
+        $backupData[] = $metadata;
+
+        // Save to JSON file
+        $filename = "{$examId}_{$table}.json";
+        Storage::put("$folderPath/$filename", json_encode($backupData, JSON_PRETTY_PRINT));
+    }
+    $rd=exammaster::where('exam_id',$r->exam_id)->first();
+    $rd->drive_status="Backup Done";
+    $rd->save();
+    
+
+    return response()->json(['status' => 'success', 'exam_id' => $examId]);
+}
+public function upload_drive(Request $request,$file_type)
+/*{
     ini_set('max_execution_time', '300');
     //https://www.itsolutionstuff.com/post/how-to-send-email-with-attachment-in-laravelexample.html
     // above code to send mail
@@ -665,7 +738,7 @@ function upload_drive(Request $r)
             $data["title"] = "From arrocorp.com";
             $data["body"] = "This is Demo";
             $files = [
-           public_path('drive/'.$r->exam_ID.'/backup'.'/'.$r->exam_ID.'_candidate_backup.sql'),
+           public_path('drive/'.$r->exam_id.'/backup'.'/'.$r->exam_id.'_candidate_backup.sql'),
                // public_path('RRB_10100404212_backup.sql'),
     
             ];
@@ -673,7 +746,7 @@ function upload_drive(Request $r)
             Mail::send('admin.drive_menu', $data, function($message)use($data, $files) {
                 $message->to($data["email"], $data["email"])
                         ->subject($data["title"]);
-                     //   $message->attach('\public\drive'.$r->exam_ID);
+                     //   $message->attach('\public\drive'.$r->exam_id);
     
                 foreach ($files as $file){
                     $message->attach($file);
@@ -681,9 +754,68 @@ function upload_drive(Request $r)
                 
             });
     //mail sending code ended
-        $data=exammaster::where('exam_ID',$r->exam_ID)->first()->update(["Drive_status"=>"Upload Done"]);
-        return response()->json($r->exam_ID." Upload Done", 200);
+        $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Upload Done"]);
+        return response()->json($r->exam_id." Upload Done", 200);
 
 }
+*/
+ {
+        $request->validate([
+            'exam_id' => 'required|string',
+        ]);
 
+        $exam_id = $request->exam_id;
+
+        // 🔹 You can map exam_id to file path dynamically
+        // Example: storage/backups/<exam_id>.json
+        $filePath = storage_path("app/backups/{$exam_id}/{$exam_id}_{$file_type}.json");
+        $fileName = basename($filePath);
+        $upload_status = 'uploaded';
+
+        if (!file_exists($filePath)) {
+            return response()->json([
+                'success' => false,
+                'message' => "File not found for exam_id: {$exam_id}",
+                'path' => $filePath
+            ], 404);
+        }
+
+        $client = new Client();
+        $url = 'http://localhost:3000/api/backup/upload'; // Node.js API URL
+
+        try {
+            $response = $client->request('PUT', $url, [
+                'multipart' => [
+                    [
+                        'name' => 'exam_id',
+                        'contents' => $exam_id
+                    ],
+                    [
+                        'name' => 'upload_status',
+                        'contents' => $upload_status
+                    ],
+                    [
+                        'name' => 'file',
+                        'contents' => fopen($filePath, 'r'),
+                        'filename' => $fileName
+                    ]
+                ],
+                'timeout' => 60,
+            ]);
+
+            $body = json_decode($response->getBody(), true);
+            return response()->json($body);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $error = $e->hasResponse()
+                ? $e->getResponse()->getBody()->getContents()
+                : $e->getMessage();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload to Node API',
+                'error' => $error
+            ], 500);
+        }
+    }
 }

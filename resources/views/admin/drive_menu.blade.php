@@ -38,7 +38,7 @@
         <thead>
             <tr>
                 <th>exam_name</th>
-                <th>exam_ID</th>
+                <th>exam_id</th>
                 <th>Drive_status</th>
                 <th>action</th>   
                 </tr>
@@ -103,13 +103,13 @@ paging:false,
    name: 'exam_name'
   },
   {
-   data: 'exam_ID',
-   name: 'exam_ID'
+   data: 'exam_id',
+   name: 'exam_id'
   },
   
   {
-   data: 'Drive_status',
-   name: 'Drive_status'
+   data: 'drive_status',
+   name: 'drive_status'
   },
   
     {
@@ -125,6 +125,7 @@ paging:false,
 
 function select_drive(drive_id)
 {
+  console.log("dtive id is :"+drive_id)
 
   $('#drive_detail').empty();
 
@@ -132,31 +133,32 @@ function select_drive(drive_id)
         type: "GET",
         url: "select_drive/"+drive_id,       
         success: function (data) {
+          console.log("successful"+data["test_name"])
         x=data.date;
-        $('#drive_detail').append("<table><th>exam_name</th><th>exam_ID</th><th>shift</th><th>time_slot</th><th>Drive_status</th><th>Total Count</th><tr><td>"+data.exam_name+"</td><td id=\'drive_id_cell\'>"+data.exam_ID+"</td><td>"+data.shift+"</td><td>"+data.time_slot+"</td><td>"+data.Drive_status+"</td><td>"+data.Total+"</td></tr></table>");
+        $('#drive_detail').append("<table><th>exam_name</th><th>exam_id</th><th>shift</th><th>time_slot</th><th>Drive_status</th><th>Total Count</th><tr><td>"+data.exam_name+"</td><td id=\'drive_id_cell\'>"+data.exam_id+"</td><td>"+data.shift+"</td><td>"+data.time_slot+"</td><td>"+data.drive_status+"</td><td>"+data.total+"</td></tr></table>");
 if(data.Drive_status=="Not Started"||data.Drive_status=="0")
 {
   $('#drive_detail').append("<br> <button onclick=\"set_drive()\">Set Question papers</button> ");
 }
 
-else if(data.Drive_status=="Question Bank Set")
+else if(data.drive_status=="Question Bank Set")
 {
   $('#drive_detail').append("<br> drive is running ");
   $('#drive_detail').append("<br> <button onclick=\"start_drive()\">Start Drive</button> ");
 }
-else if(data.Drive_status=="running")
+else if(data.drive_status=="running")
 {
   $('#drive_detail').append("<br> drive is running ");
   $('#drive_detail').append("<br> <button onclick=\"End_Drive()\">End Drive</button> ");
 }
-else if(data.Drive_status=="Drive Ended")
+else if(data.drive_status=="Drive Ended")
 {
   $('#drive_detail').append("<br> drive is ended ");
   $('#drive_detail').append("<br> <button onclick=\"create_backup()\">Backup Drive</button> ");
 
 
 }
-else if(data.Drive_status=="Backup Done")
+else if(data.drive_status=="Backup Done")
 {
   $('#drive_detail').append("<br> drive is ended ");
   $('#drive_detail').append("<br> <button onclick=\"upload_and_finish()\">Upload Drive</button> ");
@@ -244,7 +246,7 @@ function End_Drive()
          $.ajax({
            type:'POST',
            url:"{{ route('end_drive.post') }}",
-           data:{exam_ID:drive_id,status:"Drive End"},
+           data:{exam_id:drive_id,status:"Drive End"},
            success:function(data){
             select_drive(drive_id)
             $('#drive_table').DataTable().ajax.reload();
@@ -262,7 +264,7 @@ function create_backup()
          $.ajax({
            type:'POST',
            url:"{{ route('create_backup.post') }}",
-           data:{exam_ID:drive_id,status:"Backup Done"},
+           data:{exam_id:drive_id,status:"Backup Done"},
            success:function(data){
             select_drive(drive_id)
             $('#drive_table').DataTable().ajax.reload();
@@ -279,7 +281,7 @@ function upload_and_finish()
          $.ajax({
            type:'POST',
            url:"{{ route('start_selected_drive.post') }}",
-           data:{exam_ID:drive_id,status:"Upload"},
+           data:{exam_id:drive_id,status:"Upload"},
            success:function(data){
             select_drive(drive_id)
             $('#drive_table').DataTable().ajax.reload();
@@ -300,7 +302,7 @@ var i=1;
          $.ajax({
            type:'POST',
            url:"{{ route('shuffle_qp_sets.post') }}",
-           data:{exam_ID:drive_id,status:"set_qp",set:set},
+           data:{exam_id:drive_id,status:"set_qp",set:set},
            success:function(data){
            alert(data);
             select_drive(drive_id)
@@ -325,7 +327,7 @@ function start_drive()
          $.ajax({
            type:'POST',
            url:"{{ route('start_drive.post') }}",
-           data:{exam_ID:drive_id},
+           data:{exam_id:drive_id},
            success:function(data){
             $('#drive_table').DataTable().ajax.reload();
             select_drive(drive_id)

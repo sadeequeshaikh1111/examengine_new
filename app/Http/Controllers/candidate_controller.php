@@ -17,7 +17,7 @@ use App\Models\exammasters;
 use App\Models\exam_question;
 use App\Models\subject;
 use Illuminate\Support\Facades\DB;
-use App\Models\Candidate;
+use App\Models\candidate;
 use Illuminate\Http\Request;
 use Yajra\Datatables\DataTables;
 
@@ -153,7 +153,7 @@ public function get_Candidates()
 
  public function set_logs(Request $request)
    {     
-       $drcnt=exammasters::where('Drive_status','Question Bank Set')->count();
+       $drcnt=exammasters::where('drive_status','Question Bank Set')->count();
  if($drcnt!=0)
  {   return response()->json("drive is not started", 200);    
 
@@ -166,16 +166,17 @@ public function get_Candidates()
 
      
     if($qpset=='A')
+    
   {
-
-    $qpcnt=set_a_question_paper::all()->max('SQn');
+    
+    $qpcnt=set_a_question_paper::all()->max('sqn');
     for($i=1;$i<=$qpcnt;$i++)
     {
     $qp=set_a_question_paper::find($i);    
     $res=new exam_set_a_log;
     $res->reg_no=$reg_no;
-    $res->Question_number=$qp->Qn;
-    $res->SQN=$qp->SQn;  
+    $res->question_number=$qp->qn;
+    $res->sqn=$qp->sqn;  
     $res->selected_ans="0";  
     $res->points="0";  
     $res->status="untouched";        
@@ -184,14 +185,14 @@ public function get_Candidates()
 
   if($qpset=='B')
  {  
-    $qpcnt=set_b_question_paper::all()->max('SQn');
+    $qpcnt=set_b_question_paper::all()->max('sqn');
     for($i=1;$i<=$qpcnt;$i++)
     {
     $qp=set_b_question_paper::find($i);    
     $res=new exam_set_b_log;
     $res->reg_no=$reg_no;
-    $res->Question_number=$qp->Qn;
-    $res->SQN=$qp->SQn;  
+    $res->question_number=$qp->qn;
+    $res->sqn=$qp->sqn;  
     $res->selected_ans="0";  
     $res->points="0";      
     $res->status="untouched";  
@@ -200,29 +201,29 @@ public function get_Candidates()
     
  if($qpset=='C')
  { 
-    $qpcnt=set_c_question_paper::all()->max('SQn');
+    $qpcnt=set_c_question_paper::all()->max('sqn');
      for($i=1;$i<=$qpcnt;$i++)
     {
     $qp=set_c_question_paper::find($i);    
     $res=new exam_set_c_log;
     $res->reg_no=$reg_no;
-    $res->Question_number=$qp->Qn;
-    $res->SQN=$qp->SQn;  
+    $res->question_number=$qp->qn;
+    $res->sqn=$qp->sqn;  
     $res->selected_ans="0";  
     $res->points="0";    
     $res->status="untouched";  
       $res->save();}
  }    
  if($qpset=='D')
- {    $qpcnt=set_d_question_paper::all()->max('SQn');
+ {    $qpcnt=set_d_question_paper::all()->max('sqn');
 
     for($i=1;$i<=$qpcnt;$i++)
     {
     $qp=set_d_question_paper::find($i);    
     $res=new exam_set_d_log;
     $res->reg_no=$reg_no;
-    $res->Question_number=$qp->Qn;
-    $res->SQN=$qp->SQn;  
+    $res->question_number=$qp->qn;
+    $res->sqn=$qp->sqn;  
     $res->selected_ans="0";  
     $res->points="0";      
     $res->status="untouched";  
@@ -231,8 +232,8 @@ public function get_Candidates()
  }    
 $data->status="Present";
 $data->save();
- return response()->json($res, 200);    
- //return ['success' => true, 'message' => 'New user created !!'];
+ #return response()->json($res, 200);    
+ return ['success' => true, 'message' => 'New user created !!'];
 }
 else{ 
     $data->reg_no=0;   // return response()->json($data, 200);    
@@ -269,7 +270,7 @@ else{
       $status_update=Candidate::where('reg_no',$name)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
     }
        $subs=subject::all();    
-    $drive=exammasters::where('Drive_status',"running")->first();
+    $drive=exammasters::where('drive_status',"running")->first();
     if($drive==null)
     {
         $request->session()->flash('msg','Drive is not running');
@@ -305,7 +306,7 @@ function start_test(Request $request)
      $status_update=Candidate::where('reg_no',$reg_no)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
      $languages = Language::all();
        $subs=subject::all();    
-    $drive=exammasters::where('Drive_status',"running")->first();
+    $drive=exammasters::where('drive_status',"running")->first();
 
      $inst=instruction::where('language','English')->get();
 
@@ -401,8 +402,8 @@ foreach($Language as $lang)
     {
 $i=1;
 do{    $res=new set_a_question_paper;
-    $res->Qn=$i;
-        $res->SQn=$i;
+    $res->qn=$i;
+        $res->sqn=$i;
         $res->Question='drive1'.$lang.$i;
         $res->option1="drive1 Question".$i.'option1';  
         $res->option2="drive1 Question".$i.'option2';  
@@ -454,19 +455,19 @@ for($i=1;$i<=$count;$i++)
 
 $subq=subject::find($i);
 $qusetions=$subq->Questions;
-$Qn_range_start=$subq->Qn_range_start;
+$qn_range_start=$subq->qn_range_start;
 $qns=array();
 for($x=0;$x<$qusetions;$x++)
 {
-    $qns[$x]=$Qn_range_start+$x;
+    $qns[$x]=$qn_range_start+$x;
 }
 $shuffled =shuffle($qns);
 
 foreach( $qns as $value ) {
     $qp=set_a_question_paper::where('sqn',$value)->get()->first();    
     $res=new set_b_question_paper;
-    $res->SQn=$Qn_range_start;
-    $res->Qn=$value;
+    $res->sqn=$qn_range_start;
+    $res->qn=$value;
     $res->Question=$qp->Question.' set b';
     $res->option1= $qp->option1;  
     $res->option2= $qp->option2;  
@@ -480,7 +481,7 @@ foreach( $qns as $value ) {
     $res->Qtype	=$qp->Qtype;
     $res->Lang	=$qp->Lang;
     $res->save();
-    $Qn_range_start++;
+    $qn_range_start++;
     
 }
 
@@ -494,12 +495,12 @@ foreach($languages as $lang)
     //return DB::table('users')->where('username', $username)->pluck('groupName');
 if($lang->Lang!="English")
 {   
-   $qpb=set_b_question_paper::where('sqn',$sqn->SQn)->get()->first();
-    $qpa=set_a_question_paper::where('qn',$qpb->Qn)->where('Lang',$lang->Lang)->get()->first();
+   $qpb=set_b_question_paper::where('sqn',$sqn->sqn)->get()->first();
+    $qpa=set_a_question_paper::where('qn',$qpb->qn)->where('Lang',$lang->Lang)->get()->first();
 
     $resb=new set_b_question_paper;
-    $resb->SQn=$qpb->SQn;
-    $resb->Qn=$qpb->Qn;
+    $resb->sqn=$qpb->sqn;
+    $resb->qn=$qpb->qn;
     $resb->Question=$qpa->Question.' set b';
     $resb->option1= $qpa->option1;  
     $resb->option2= $qpa->option2;  
@@ -574,7 +575,7 @@ public function end_test(Request $request)
 {
     $reg_no=$request->input('reg_no');
     $data=Candidate::where('reg_no',$reg_no)->first();
-    $drive=exammasters::where('Drive_status',"running")->first();
+    $drive=exammasters::where('drive_status',"running")->first();
     $feedback=feedbacks::all();
 
   //  return view('exam_platform',compact('data','subs','drive','inst','languages'));//exam_platform 
