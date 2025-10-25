@@ -136,7 +136,7 @@ function select_drive(drive_id)
           console.log("successful"+data["test_name"])
         x=data.date;
         $('#drive_detail').append("<table><th>exam_name</th><th>exam_id</th><th>shift</th><th>time_slot</th><th>Drive_status</th><th>Total Count</th><tr><td>"+data.exam_name+"</td><td id=\'drive_id_cell\'>"+data.exam_id+"</td><td>"+data.shift+"</td><td>"+data.time_slot+"</td><td>"+data.drive_status+"</td><td>"+data.total+"</td></tr></table>");
-if(data.Drive_status=="Not Started"||data.Drive_status=="0")
+if(data.drive_status=="Not Started"||data.drive_status=="0")
 {
   $('#drive_detail').append("<br> <button onclick=\"set_drive()\">Set Question papers</button> ");
 }

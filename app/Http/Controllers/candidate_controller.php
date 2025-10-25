@@ -58,10 +58,10 @@ class candidate_controller extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Candidate  $candidate
+     * @param  \App\Models\candidate  $candidate
      * @return \Illuminate\Http\Response
      */
-    public function show(Candidate $candidate)
+    public function show(candidate $candidate)
     {
         //
     }
@@ -69,10 +69,10 @@ class candidate_controller extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Candidate  $candidate
+     * @param  \App\Models\candidate  $candidate
      * @return \Illuminate\Http\Response
      */
-    public function edit(Candidate $candidate)
+    public function edit(candidate $candidate)
     {
         //
     }
@@ -81,10 +81,10 @@ class candidate_controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Candidate  $candidate
+     * @param  \App\Models\candidate  $candidate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Candidate $candidate)
+    public function update(Request $request, candidate $candidate)
     {
         //
     }
@@ -92,10 +92,10 @@ class candidate_controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Candidate  $candidate
+     * @param  \App\Models\candidate  $candidate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Candidate $candidate)
+    public function destroy(candidate $candidate)
     {
         //
     }
@@ -106,23 +106,23 @@ public function get_set()
 }
 public function get_candidate_info($reg_no)
 {
-    $data=Candidate::where('reg_no',$reg_no)->first();
+    $data=candidate::where('reg_no',$reg_no)->first();
     return response()->json($data, 200); 
 
 }
 public function update_time(Request $request)
-{          $data =Candidate::where('reg_no',$request->reg_no)->update($request->all());
+{          $data =candidate::where('reg_no',$request->reg_no)->update($request->all());
 
       
-   // $res=Candidate::where('reg_no',$request->reg_no);
+   // $res=candidate::where('reg_no',$request->reg_no);
    // $res->time=$request->input('time');
    // $res->save();
     return response()->json($data, 200); 
  
 }    
-public function get_Candidates()
+public function get_candidates()
         {          
-            $data = Candidate::latest()->get();
+            $data = candidate::latest()->get();
             return DataTables::of($data)
                     ->addColumn('action', function($data){
                         $button = '<button type="button" name="edit" id='.$data->reg_no.' class="edit btn btn-primary btn-sm"  onclick=Register(this.id)>Register</button> &nbsp;<button type="button" name="time" id='.$data->reg_no.' class="edit btn btn-primary btn-sm"  onclick=Add_time(this.id)>Un Register </button>';
@@ -133,9 +133,9 @@ public function get_Candidates()
         } 
 
 
-        public function get_Candidates_unlock()
+        public function get_candidates_unlock()
         {          
-            $data = Candidate::latest()->get();
+            $data = candidate::latest()->get();
             return DataTables::of($data)
                     ->addColumn('action', function($data){
                       
@@ -146,8 +146,8 @@ public function get_Candidates()
                     ->rawColumns(['action'])
                     ->make(true);
         }        
-        public function get_Candidates_list(Request $request)
-        {      $data=Candidate::select('reg_no','name','dob');
+        public function get_candidates_list(Request $request)
+        {      $data=candidate::select('reg_no','name','dob');
                        return DataTables::of($data)->make(true);
         } 
 
@@ -159,7 +159,7 @@ public function get_Candidates()
 
 }
   $reg_no=$request->input('reg_no');
-  $data=Candidate::where('reg_no',$request->input('reg_no'))->first();
+  $data=candidate::where('reg_no',$request->input('reg_no'))->first();
   $qpset=$data->qpset;
  if($data->status =='not started')
  {
@@ -250,24 +250,24 @@ else{
  
     $name=$request->input('name');
     $password=$request->input('password');
-   $user=Candidate::where('reg_no',$name)->where('dob',$password)->get()->first();
+   $user=candidate::where('reg_no',$name)->where('dob',$password)->get()->first();
    if($user)
    {
     if($user->status=="Loged In")
     {
-     $request->session()->flash('msg','Candidate Registration is not done');
-        return back()->with('msg', 'Candidate is Loged in on other computer');
+     $request->session()->flash('msg','candidate Registration is not done');
+        return back()->with('msg', 'candidate is Loged in on other computer');
     }
     if($user->status=="not started")
     {
-     $request->session()->flash('msg','Candidate Registration is not done');
+     $request->session()->flash('msg','candidate Registration is not done');
         return back()->with('msg', 'Please Complete Registration process');
     }
     if($user->status=="unlocked")
     {
         $subs=subject::all();    
-        $data=Candidate::where('reg_no',$name)->first();
-      $status_update=Candidate::where('reg_no',$name)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
+        $data=candidate::where('reg_no',$name)->first();
+      $status_update=candidate::where('reg_no',$name)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
     }
        $subs=subject::all();    
     $drive=exammasters::where('drive_status',"running")->first();
@@ -276,8 +276,8 @@ else{
         $request->session()->flash('msg','Drive is not running');
         return back()->with('msg', 'Drive is not started');
     }
-       $data=Candidate::where('reg_no',$name)->first();
-     $status_update=Candidate::where('reg_no',$name)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
+       $data=candidate::where('reg_no',$name)->first();
+     $status_update=candidate::where('reg_no',$name)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
      $languages = Language::all();
 
      $inst=instruction::where('language','English')->get();
@@ -302,8 +302,8 @@ catch(MethodNotAllowedHttpException $e)
 function start_test(Request $request)
 {
       $reg_no=$request->input('reg_no');
-    $data=Candidate::where('reg_no',$reg_no)->first();
-     $status_update=Candidate::where('reg_no',$reg_no)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
+    $data=candidate::where('reg_no',$reg_no)->first();
+     $status_update=candidate::where('reg_no',$reg_no)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
      $languages = Language::all();
        $subs=subject::all();    
     $drive=exammasters::where('drive_status',"running")->first();
@@ -318,20 +318,20 @@ function start_test(Request $request)
     
     if($request->time==null)
     {
-        $cad=Candidate::where('reg_no',$request->Reg_no)->first();
+        $cad=candidate::where('reg_no',$request->Reg_no)->first();
         if($cad->status=="Loged In" || $cad->status=="unlocked")    
         {
-            $data=Candidate::where('reg_no',$request->Reg_no)->first()->update($request->all());
+            $data=candidate::where('reg_no',$request->Reg_no)->first()->update($request->all());
         }
         return response()->json($cad, 200);
     
     }
     else{
-        $cad=Candidate::where('reg_no',$request->Reg_no)->first();
+        $cad=candidate::where('reg_no',$request->Reg_no)->first();
 
         $extra_time=$request->time;
         $time=$cad->time + $extra_time;
-        $data=Candidate::where('reg_no',$request->Reg_no)->first()->update(array_merge($request->all(), ['time' => $time]));
+        $data=candidate::where('reg_no',$request->Reg_no)->first()->update(array_merge($request->all(), ['time' => $time]));
         return response()->json($cad, 200);
 
     }
@@ -339,10 +339,11 @@ function start_test(Request $request)
   }
 function set_unlock_all(Request $request)
 {
-    DB::table('Candidates')
-    ->where("status","loged in")
-    ->update(['status' => "unlocked"]);
-//      $cad=Candidate::where('reg_no',$request->Reg_no)->where('status',"loged in")->update(array_merge($request->all(), ['status' => 'Loged In']));;
+  //exammaster::where('exam_id', $r->exam_id)->update(["drive_status" => "running"]);
+DB::table('candidates')
+    ->where('status', 'Loged In')  // match exact case
+    ->update(['status' => 'unlocked']);
+//      $cad=candidate::where('reg_no',$request->Reg_no)->where('status',"loged in")->update(array_merge($request->all(), ['status' => 'Loged In']));;
 return response("unlocked all");
 }
 
@@ -524,13 +525,13 @@ public function set_idle(Request $request)
 
  if($request->flag==0)
     {
-         DB::table('Candidates')->update(['Idle' => "True"]);
+         DB::table('candidates')->update(['Idle' => "True"]);
 return response("Idle status set true Flag is: ".$request->flag);
 
     }
   else{
-        DB::table('Candidates')->where('status','Loged In')->update(['Dead' =>  DB::raw('Dead+1')]);
-        DB::table('Candidates')->where('Dead','>','2')->update(['status' =>  DB::raw('Locked')]);
+        DB::table('candidates')->where('status','Loged In')->update(['Dead' =>  DB::raw('Dead+1')]);
+        DB::table('candidates')->where('Dead','>','2')->update(['status' =>  DB::raw('Locked')]);
 
 return response("Dead status set true Flag is: ".$request->flag);
     }
@@ -550,7 +551,7 @@ public function set_dead(Request $request)
 public function get_dead()
 {
 $list="";
-$data=Candidate::where('Dead','>=','2')->get();
+$data=candidate::where('Dead','>=','2')->get();
 
 foreach($data as $u)
 {
@@ -567,14 +568,14 @@ foreach($data as $u)
 public function get_idle()
 {
 
-$data=Candidate::where('Dead','True')->get();
+$data=candidate::where('Dead','True')->get();
 return $data;
 }
 
 public function end_test(Request $request)
 {
     $reg_no=$request->input('reg_no');
-    $data=Candidate::where('reg_no',$reg_no)->first();
+    $data=candidate::where('reg_no',$reg_no)->first();
     $drive=exammasters::where('drive_status',"running")->first();
     $feedback=feedbacks::all();
 
@@ -588,10 +589,10 @@ public function submitFeedback(Request $request)
     $reg_no = $request->input('reg_no');
 
     // Retrieve the candidate based on the registration number
-    $candidate = Candidate::where('reg_no', $reg_no)->first();
+    $candidate = candidate::where('reg_no', $reg_no)->first();
 
     if (!$candidate) {
-        return "Candidate not found!";
+        return "candidate not found!";
     }
 
     // Get all input data from the request and exclude the token

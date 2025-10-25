@@ -543,16 +543,32 @@ $rd=exammaster::where('drive_status','=','running')->orwhere('drive_status','=',
     return response()->json($r->exam_id." is already started Please End Running Drive and Complete Back up process first then start next drive");
 
 }
+
+DB::table('candidates')->truncate();
+DB::table('set_a_question_papers')->truncate();
+DB::table('set_b_question_papers')->truncate();
+DB::table('set_c_question_papers')->truncate();
+DB::table('set_d_question_papers')->truncate();
+DB::table('subjects')->truncate();
+
+
+
 DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql')));
 DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/qp'.'/'.$r->exam_id.'_Qp.sql')));
-$data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Question Bank Set"]);
+$exam = exammaster::where('exam_id', $r->exam_id)->first();
+$exam->drive_status = "Question Bank Set";
+$exam->save();
+
 return response()->json($r->exam_id."Question paper sets created", 200);
 }
 function start_drive(Request $r)
 {
     $rd=exammaster::where('exam_id',$r->exam_id)->first();
     $drive_status="running";
-    $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"running"]);
+$exam = exammaster::where('exam_id', $r->exam_id)->first();
+$exam->drive_status = "running";
+$exam->save();
+
     return response()->json($r->exam_id." drive started", 200);
 
 }
