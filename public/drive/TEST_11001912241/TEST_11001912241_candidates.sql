@@ -1,4 +1,4 @@
-INSERT INTO `candidates` (`reg_no`, `name`, `node`, `status`, `dob`, `time`, `qpset`, `marks`, `Language`, `current_qn`, `Dead`, `idle`, `created_at`, `updated_at`) VALUES
+INSERT INTO candidates (reg_no, name, node, status, dob, time, qpset, marks, Language, current_qn, Dead, idle, created_at, updated_at) VALUES
 ('1901', 'Ashutosh Jadhav', 'C1', 'Loged In', '1234', '900', 'A', '0', 'English', 1, 0, 0, '2021-01-30 02:50:30', '2021-08-22 01:30:53'),
 ('1902', 'Priya Kulkarni', 'C2', 'Loged In', '1234', '900', 'B', '0', 'English', 1, 0, 0, '2021-02-15 03:40:30', '2021-08-22 01:45:53'),
 ('1903', 'Rohit Patil', 'C3', 'Loged In', '1234', '900', 'C', '0', 'English', 1, 0, 0, '2021-03-12 05:00:15', '2021-08-22 02:00:53'),

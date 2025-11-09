@@ -23,6 +23,8 @@ use App\Models\exam_set_d_log;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Exception;
+use Illuminate\Support\Facades\Http;
+
 
 class file_controller extends Controller
 {
@@ -598,104 +600,7 @@ foreach($uncomplete as $u)
 
 }
 function backup_selected_drive(Request $r)
-/*old code{
-   # return candidate::all();
-       $backup = [
-                'timestamp' => now()->toDateTimeString(),
-                'candidates' => DB::table('candidates')->get(),
-                'set_a_logs' => DB::table('exam_set_a_logs')->get(),
-                'set_b_logs' => DB::table('exam_set_b_logs')->get(),
-                'set_c_logs' => DB::table('exam_set_c_logs')->get(),
-                'set_d_logs' => DB::table('exam_set_d_logs')->get(),
-            ];
-            $fileName= $r->exam_id."Backup";
 
-            Storage::disk('local')->put($fileName, json_encode($backup, JSON_PRETTY_PRINT));
-             return response()->json([
-                'message' => '✅ Full backup completed successfully',
-                'file' => $fileName,
-                'record_counts' => [
-                    'candidates' => count($backup['candidates']),
-                    'set_a_logs' => count($backup['set_a_logs']),
-                    'set_b_logs' => count($backup['set_b_logs']),
-                    'set_c_logs' => count($backup['set_c_logs']),
-                    'set_d_logs' => count($backup['set_d_logs']),
-                ]
-            ]);
-
-    // Convert the candidates data to a JSON object
-    $jsonData = $candidates->toJson();
-    // Define the backup file name
-    $fileName = 'candidate_data_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-
-    // Store the JSON data in a file in the 'local' storage
-    Storage::disk('local')->put($fileName, $jsonData);
-    // 2. Backup Set A Question Papers Table
-    $setAQuestions = set_a_question_paper::all();
-    $setAQuestionsJson = json_encode($setAQuestions, JSON_UNESCAPED_UNICODE);
-    $setAFileName = 'set_a_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($setAFileName, $setAQuestionsJson);
-
-    // 3. Backup Set B Question Papers Table
-    $setBQuestions = set_b_question_paper::all();
-    $setBQuestionsJson = json_encode($setBQuestions, JSON_UNESCAPED_UNICODE);
-    $setBFileName = 'set_b_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($setBFileName, $setBQuestionsJson);
-
-    // 4. Backup Set C Question Papers Table
-    $setCQuestions = set_c_question_paper::all();
-    $setCQuestionsJson = json_encode($setCQuestions, JSON_UNESCAPED_UNICODE);
-    $setCFileName = 'set_c_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($setCFileName, $setCQuestionsJson);
-
-    // 5. Backup Set D Question Papers Table
-    $setDQuestions = set_d_question_paper::all();
-    $setDQuestionsJson = json_encode($setDQuestions, JSON_UNESCAPED_UNICODE);
-    $setDFileName = 'set_d_question_paper_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($setDFileName, $setDQuestionsJson);
-
-    // 6. Backup Exam Set A Logs Table (Merged into one file)
-    $examSetALogs = exam_set_a_log::all();
-    $examSetALogsJson = json_encode($examSetALogs, JSON_UNESCAPED_UNICODE);
-    $examSetALogFileName = 'exam_set_a_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($examSetALogFileName, $examSetALogsJson);
-
-    // 7. Backup Exam Set B Logs Table (Merged into one file)
-    $examSetBLogs = exam_set_b_log::all();
-    $examSetBLogsJson = json_encode($examSetBLogs, JSON_UNESCAPED_UNICODE);
-    $examSetBLogFileName = 'exam_set_b_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($examSetBLogFileName, $examSetBLogsJson);
-
-    // 8. Backup Exam Set C Logs Table (Merged into one file)
-    $examSetCLogs = exam_set_c_log::all();
-    $examSetCLogsJson = json_encode($examSetCLogs, JSON_UNESCAPED_UNICODE);
-    $examSetCLogFileName = 'exam_set_c_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($examSetCLogFileName, $examSetCLogsJson);
-
-    // 9. Backup Exam Set D Logs Table (Merged into one file)
-    $examSetDLogs = exam_set_d_log::all();
-    $examSetDLogsJson = json_encode($examSetDLogs, JSON_UNESCAPED_UNICODE);
-    $examSetDLogFileName = 'exam_set_d_log_backup_' . now()->format('Y_m_d_H_i_s') . '.json';
-    Storage::disk('local')->put($examSetDLogFileName, $examSetDLogsJson);
-
-
-
-
-    $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Backup Done"]);
-    set_a_question_paper::query()->truncate();
-    set_b_question_paper::query()->truncate();
-    set_c_question_paper::query()->truncate();
-    set_d_question_paper::query()->truncate();
-    exam_set_a_log::query()->truncate();
-    exam_set_b_log::query()->truncate();
-    exam_set_c_log::query()->truncate();
-    exam_set_d_log::query()->truncate();
-    candidate::query()->truncate(); 
-    subject::query()->truncate();
-
-     return response()->json($r->exam_id."Drive Backup Done ", 200);
-
-}*/
 {
     $examId = $r->exam_id;
 
@@ -743,38 +648,10 @@ function backup_selected_drive(Request $r)
 
     return response()->json(['status' => 'success', 'exam_id' => $examId]);
 }
-public function upload_drive(Request $request,$file_type)
-/*{
-    ini_set('max_execution_time', '300');
-    //https://www.itsolutionstuff.com/post/how-to-send-email-with-attachment-in-laravelexample.html
-    // above code to send mail
-    //below code to send mail
-         
-            $data["email"] = "sadiktamboli57@gmail.com";
-            $data["title"] = "From arrocorp.com";
-            $data["body"] = "This is Demo";
-            $files = [
-           public_path('drive/'.$r->exam_id.'/backup'.'/'.$r->exam_id.'_candidate_backup.sql'),
-               // public_path('RRB_10100404212_backup.sql'),
-    
-            ];
-      
-            Mail::send('admin.drive_menu', $data, function($message)use($data, $files) {
-                $message->to($data["email"], $data["email"])
-                        ->subject($data["title"]);
-                     //   $message->attach('\public\drive'.$r->exam_id);
-    
-                foreach ($files as $file){
-                    $message->attach($file);
-                }
-                
-            });
-    //mail sending code ended
-        $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"Upload Done"]);
-        return response()->json($r->exam_id." Upload Done", 200);
 
-}
-*/
+
+public function upload_drive(Request $request,$file_type)
+
  {
         $request->validate([
             'exam_id' => 'required|string',
@@ -834,4 +711,130 @@ public function upload_drive(Request $request,$file_type)
             ], 500);
         }
     }
+function get_drive_from_core(Request $request)
+{
+    $center_code = $request->input('center_code', '1010'); // default or from request
+    $client = new Client();
+    $url = 'http://localhost:3000/api/backup/getCenterExams?center_code=' . $center_code;
+
+    try {
+        // Since it’s a GET API, just call GET
+        $response = $client->request('GET', $url, [
+            'timeout' => 30,
+        ]);
+
+        $body = json_decode($response->getBody(), true);
+        $data = $body['data'] ?? [];
+
+        return DataTables::of($data)
+            ->addColumn('action', function($row) {
+                return '<button type="button" class="btn btn-sm btn-primary" id="'.$row['exam_id'].'" onclick="select_drive(this.id)">Select</button>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+        //return response()->json($body);
+
+
+
+    } catch (\GuzzleHttp\Exception\RequestException $e) {
+        $error = $e->hasResponse()
+            ? $e->getResponse()->getBody()->getContents()
+            : $e->getMessage();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch exams from Node API',
+            'error' => $error
+        ], 500);
+    }
 }
+
+
+
+
+
+function download_drive_dump_step1(Request $request)
+
+{
+
+    $driveId = $request->input('driveid');
+    $component = $request->input('component');
+
+    if (!$driveId || !$component) {
+        return response()->json([
+            'success' => false,
+            'message' => 'driveid and component are required'
+        ]);
+    }
+
+    try {
+        // API endpoint
+        $expressUrl = env('EXPRESS_API_URL').'/api/backup/download_component';
+             
+
+        // Prepare cURL
+        $ch = curl_init($expressUrl);
+        $payload = json_encode([
+            'driveid' => $driveId,
+            'component' => $component
+        ]);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+        // Execute and get response
+        $response = curl_exec($ch);
+
+        // Handle cURL errors
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            curl_close($ch);
+            return response()->json([
+                'success' => false,
+                'message' => 'cURL error',
+                'error' => $error_msg
+            ]);
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode !== 200) {
+            return response()->json([
+                'success' => false,
+                'message' => "Failed to fetch file from Express server (HTTP $httpCode)",
+                'response' => $response
+            ]);
+        }
+
+        // Save file in public/drives/<drive_id>/
+        $savePath = public_path("drives/{$driveId}/");
+        if (!file_exists($savePath)) {
+            mkdir($savePath, 0777, true);
+        }
+
+        $filePath = $savePath . $component;
+        file_put_contents($filePath, $response);
+
+        return response()->json([
+            'success' => true,
+            'path' => $filePath,
+            'message' => 'File downloaded successfully'
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Server error',
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+}
+
+

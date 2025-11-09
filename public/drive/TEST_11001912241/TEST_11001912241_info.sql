@@ -1,2 +1,2 @@
-INSERT INTO `exammasters` (`exam_name`, `exam_ID`, `date`, `shift`, `time_slot`, `Total`, `Present`, `Absent`, `Attending`, `completed`, `Drive_status`, `Start_status`, `End_status`, `Upload_status`, `Backup_status`, `truncate_status`, `created_at`, `updated_at`) VALUES
+INSERT INTO exammasters (exam_name, exam_ID, date, shift, time_slot, Total, Present, Absent, Attending, completed, Drive_status, Start_status, End_status, Upload_status, Backup_status, truncate_status, created_at, updated_at) VALUES
 ('test_name', 'TEST_11001912241', CURDATE(), '1', '9:00 AM To 12:00 PM', 15, 0, 0, 0, 0, '0', 0, 0, 0, 0, 0, NOW(), NOW());

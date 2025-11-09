@@ -177,6 +177,18 @@ Route::get('/drive_menu', function () {
     return view('admin.admin_login');
     }
 });
+
+
+Route::get('/drive_downloader', function () {
+    if(session()->has('user'))
+    {return view('admin.drive_downloader');
+    }
+    else
+    {
+    return view('admin.admin_login');
+    }
+});
+
 //drive menu route
 Route::get('/college_menu', function () {
     if(session()->has('user'))
@@ -263,5 +275,13 @@ Route::post('upload_drive', [App\Http\Controllers\file_controller::Class, 'uploa
 Route::post('upload',[App\Http\Controllers\file_controller::Class,'store_drive']);//post file names
 Route::post('uploadlink',[App\Http\Controllers\file_controller::Class,'store_drive_link']);//post file names
 Route::post('create_qp_sets',[App\Http\Controllers\candidate_controller::Class,'create_qp_sets'])->name('create_qp_sets.post'); ;//create mock qp data
+Route::post('download_drive_dump_step1', [App\Http\Controllers\file_controller::class, 'download_drive_dump_step1'])->name('download_drive_dump_step1.post');
+
+
 //submit feedback
 Route::post('submitFeedback', [App\Http\Controllers\candidate_controller::class, 'submitFeedback'])->name('submitFeedback');
+
+
+
+//drive downloader roots
+Route::get('get_drive_from_core', [App\Http\Controllers\file_controller::Class, 'get_drive_from_core'])->name('get_drive_from_core.get');

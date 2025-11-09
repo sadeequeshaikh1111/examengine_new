@@ -90,7 +90,13 @@ Dashboard                <i class="right fas fa-angle-left"></i>
               <li class="nav-item">
                 <a href="drive_menu" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Drive</p>
+                  <p>Drive Management</p>
+                </a>
+              </li>
+                 <li class="nav-item">
+                <a href="drive_downloader" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Drive Downloader</p>
                 </a>
               </li>
               <li class="nav-item">
