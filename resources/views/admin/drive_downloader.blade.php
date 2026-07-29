@@ -316,26 +316,7 @@ function upload_and_finish()
 }
 var i=1;
 
- function set_qp(set)
-{
-  alert("process started")
-  console.log(set)
-  var drive_id=$("#drive_id_cell").text();
-  console.log(drive_id);
-         $.ajax({
-           type:'POST',
-           url:"{{ route('shuffle_qp_sets.post') }}",
-           data:{exam_id:drive_id,status:"set_qp",set:set},
-           success:function(data){
-           alert(data);
-            select_drive(drive_id)
 
-           }
-        });
-
-     
-
-}
 async function set_drive()
 {
 await set_qp(1);

@@ -755,7 +755,6 @@ function get_drive_from_core(Request $request)
 
 
 function download_drive_dump_step1(Request $request)
-
 {
 
     $driveId = $request->input('driveid');
