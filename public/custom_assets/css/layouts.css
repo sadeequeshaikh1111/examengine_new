@@ -1,0 +1,49 @@
+/* ============================================
+   Exam UI - Layout Shell
+   ============================================ */
+
+.exam-shell {
+    min-height: 100vh;
+    background-color: var(--ee-bg-body);
+    padding: var(--ee-space-3);
+}
+
+.exam-shell .row {
+    --bs-gutter-x: 1rem;
+}
+
+.exam-left-panel,
+.exam-right-panel {
+    background-color: var(--ee-bg-content);
+    border: 1px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius-lg);
+    padding: var(--ee-space-3);
+    height: 100%;
+}
+
+.exam-left-panel {
+    position: sticky;
+    top: var(--ee-space-3);
+}
+
+@media (max-width: 991.98px) {
+    .exam-left-panel {
+        position: static;
+        margin-bottom: var(--ee-space-3);
+    }
+}
+
+.exam-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--ee-space-2);
+    margin-bottom: var(--ee-space-3);
+    padding-bottom: var(--ee-space-2);
+    border-bottom: 1px solid var(--ee-border-color);
+}
+
+.exam-toolbar .qn-label {
+    font-weight: var(--ee-font-weight-bold);
+}

@@ -1,0 +1,31 @@
+/* ============================================
+   Exam UI - Timer
+   ============================================ */
+
+.exam-timer {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-size: 1.4rem;
+    font-weight: var(--ee-font-weight-bold);
+    letter-spacing: 0.05em;
+    padding: 0.5rem 0.75rem;
+    margin: var(--ee-space-2) 0;
+    border-radius: var(--ee-border-radius);
+    background-color: var(--ee-primary-light);
+    color: var(--ee-primary-dark);
+    border: 1px solid var(--ee-primary);
+}
+
+.exam-timer.exam-timer--warning {
+    background-color: var(--ee-danger-light);
+    color: var(--ee-danger-dark);
+    border-color: var(--ee-danger);
+    animation: exam-timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes exam-timer-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}

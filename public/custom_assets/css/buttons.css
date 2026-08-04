@@ -1,0 +1,48 @@
+/* ============================================
+   Exam UI - Action & Subject Tab Buttons
+   ============================================ */
+
+.subject-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: var(--ee-space-2);
+}
+
+.subject-tab {
+    flex: 1 1 auto;
+    font-size: var(--ee-font-size-sm);
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--ee-border-radius);
+    border: 1px solid var(--ee-border-color);
+    background-color: var(--ee-light);
+    color: var(--ee-text-primary);
+    cursor: pointer;
+}
+
+.subject-tab.active {
+    background-color: var(--ee-primary);
+    border-color: var(--ee-primary);
+    color: var(--ee-white);
+}
+
+.exam-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ee-space-2);
+    margin-top: var(--ee-space-3);
+    padding-top: var(--ee-space-3);
+    border-top: 1px solid var(--ee-border-color);
+}
+
+.exam-action-bar .btn {
+    flex: 1 1 auto;
+    min-width: 160px;
+}
+
+.exam-end-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--ee-space-2);
+    margin-top: var(--ee-space-3);
+}

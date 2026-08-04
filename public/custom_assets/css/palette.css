@@ -1,0 +1,88 @@
+/* ============================================
+   Exam UI - Question Palette
+   ============================================ */
+
+.palette-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ee-space-2);
+    font-size: var(--ee-font-size-xs);
+    color: var(--ee-text-muted);
+    margin-bottom: var(--ee-space-2);
+}
+
+.palette-legend .legend-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+    border: 1px solid var(--ee-border-color);
+}
+
+.palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: var(--ee-space-2);
+}
+
+.palette-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.1rem;
+    font-size: var(--ee-font-size-sm);
+    font-weight: var(--ee-font-weight-bold);
+    border-radius: var(--ee-border-radius-sm);
+    border: 1px solid var(--ee-border-color);
+    cursor: pointer;
+    background-color: var(--ee-light);
+    color: var(--ee-text-secondary);
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.palette-btn:hover {
+    border-color: var(--ee-primary);
+}
+
+/* Not visited - gray */
+.palette-btn--notvisited {
+    background-color: #e9ecef;
+    color: var(--ee-text-secondary);
+    border-color: #d0d4d9;
+}
+
+/* Visited but not answered - white */
+.palette-btn--visited {
+    background-color: var(--ee-white);
+    color: var(--ee-text-primary);
+    border-color: var(--ee-border-color);
+}
+
+/* Answer saved - green */
+.palette-btn--answered {
+    background-color: var(--ee-success);
+    color: var(--ee-white);
+    border-color: var(--ee-success-dark);
+}
+
+/* Marked for review - purple */
+.palette-btn--marked {
+    background-color: #6f42c1;
+    color: var(--ee-white);
+    border-color: #59339d;
+}
+
+/* Current question - blue ring, layered on top of the above */
+.palette-btn--current {
+    box-shadow: 0 0 0 3px var(--ee-primary-light), 0 0 0 1px var(--ee-primary) inset;
+    border-color: var(--ee-primary);
+}
+
+.legend-swatch--notvisited { background-color: #e9ecef; }
+.legend-swatch--visited { background-color: var(--ee-white); }
+.legend-swatch--answered { background-color: var(--ee-success); }
+.legend-swatch--marked { background-color: #6f42c1; }
+.legend-swatch--current { background-color: var(--ee-primary); }

@@ -262,3 +262,41 @@
         width: 100%;
     }
 }
+/* ============================================
+   Exam UI - Candidate Card
+   ============================================ */
+
+.candidate-card {
+    background-color: var(--ee-bg-content);
+    border: 1px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius-lg);
+    padding: var(--ee-space-3);
+    text-align: center;
+}
+
+.candidate-card .candidate-photo {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: var(--ee-border-radius);
+    border: 2px solid var(--ee-border-color);
+    margin-bottom: var(--ee-space-2);
+    background-color: var(--ee-light);
+}
+
+.candidate-card .candidate-name {
+    font-weight: var(--ee-font-weight-bold);
+    font-size: var(--ee-font-size-lg);
+    margin-bottom: var(--ee-space-1);
+}
+
+.candidate-card .candidate-meta {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+    margin-bottom: 2px;
+}
+
+.candidate-card .candidate-meta span {
+    color: var(--ee-text-primary);
+    font-weight: var(--ee-font-weight-normal);
+}

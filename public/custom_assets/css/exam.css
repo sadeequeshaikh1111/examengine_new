@@ -1,0 +1,23 @@
+/* ============================================
+   Exam UI - Question Area
+   ============================================ */
+
+.question-container {
+    min-height: 120px;
+    padding: var(--ee-space-3);
+    background-color: var(--ee-light);
+    border-radius: var(--ee-border-radius);
+    margin-bottom: var(--ee-space-3);
+    font-size: var(--ee-font-size-base);
+    line-height: 1.5;
+}
+
+.question-container img {
+    max-width: 100%;
+    border-radius: var(--ee-border-radius-sm);
+}
+
+#qtools {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+}
