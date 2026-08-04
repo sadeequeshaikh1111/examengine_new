@@ -1,0 +1,22 @@
+/* ============================================
+   Design System - Shared Styles Entry Point
+   Lightweight replacement for AdminLTE
+   ============================================
+   Import order matters:
+   1. variables   - CSS custom properties
+   2. base        - element resets & defaults
+   3. components  - reusable UI components
+   4. utilities   - helper classes
+   ============================================ */
+
+@import url('./variables.css');
+@import url('./base.css');
+@import url('./components/buttons.css');
+@import url('./components/cards.css');
+@import url('./components/tables.css');
+@import url('./components/forms.css');
+@import url('./components/alerts.css');
+@import url('./components/navbar.css');
+@import url('./components/sidebar.css');
+@import url('./components/layout.css');
+@import url('./utilities.css');

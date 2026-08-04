@@ -53,9 +53,6 @@ THis is drive downloader
 </body>
 <script src="{{ asset('assets\js\jquery.min.js')}}"></script>
 <script src="{{ asset('assets\js\jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset('assets\js\bootstrap.min.js')}}"></script>
-<link href="{{ asset('assets\css\bootstrap.css') }}" rel="stylesheet">
-<link href="{{ asset('assets\css\drive_menucss.css') }}" rel="stylesheet">
 
 
 <script type="text/javascript">

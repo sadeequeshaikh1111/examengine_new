@@ -1,0 +1,137 @@
+/* ============================================
+   Design System - Alerts
+   ============================================ */
+
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: var(--ee-space-3);
+    border: 1px solid transparent;
+    border-radius: var(--ee-border-radius);
+}
+
+.alert-heading {
+    color: inherit;
+}
+
+.alert-link {
+    font-weight: var(--ee-font-weight-bold);
+}
+
+.alert-dismissible {
+    padding-right: 4rem;
+}
+
+.alert-dismissible .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: 0.75rem 1.25rem;
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    font-size: 1.5rem;
+    font-weight: var(--ee-font-weight-bold);
+    line-height: 1;
+    text-shadow: 0 1px 0 var(--ee-white);
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.alert-dismissible .close:hover {
+    opacity: 0.75;
+}
+
+/* ---------- Variants ---------- */
+.alert-primary {
+    color: var(--ee-primary-dark);
+    background-color: var(--ee-primary-light);
+    border-color: #b8daff;
+}
+
+.alert-secondary {
+    color: var(--ee-secondary-dark);
+    background-color: var(--ee-secondary-light);
+    border-color: #d6d8db;
+}
+
+.alert-success {
+    color: var(--ee-success-dark);
+    background-color: var(--ee-success-light);
+    border-color: #c3e6cb;
+}
+
+.alert-info {
+    color: var(--ee-info-dark);
+    background-color: var(--ee-info-light);
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: var(--ee-warning-dark);
+    background-color: var(--ee-warning-light);
+    border-color: #ffeeba;
+}
+
+.alert-danger {
+    color: var(--ee-danger-dark);
+    background-color: var(--ee-danger-light);
+    border-color: #f5c6cb;
+}
+
+.alert-light {
+    color: var(--ee-text-secondary);
+    background-color: var(--ee-light);
+    border-color: #fdfdfe;
+}
+
+.alert-dark {
+    color: var(--ee-dark);
+    background-color: var(--ee-dark-light);
+    border-color: #c6c8ca;
+}
+
+/* ---------- Compact (AdminLTE-like) ---------- */
+.alert-compact {
+    padding: 0.5rem 0.75rem;
+    font-size: var(--ee-font-size-sm);
+    margin-bottom: var(--ee-space-2);
+}
+
+/* ---------- Callout style (AdminLTE-like) ---------- */
+.callout {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: var(--ee-space-3);
+    background-color: var(--ee-white);
+    border-left: 3px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius);
+}
+
+.callout-primary {
+    border-left-color: var(--ee-primary);
+}
+
+.callout-secondary {
+    border-left-color: var(--ee-secondary);
+}
+
+.callout-success {
+    border-left-color: var(--ee-success);
+}
+
+.callout-info {
+    border-left-color: var(--ee-info);
+}
+
+.callout-warning {
+    border-left-color: var(--ee-warning);
+}
+
+.callout-danger {
+    border-left-color: var(--ee-danger);
+}
+
+.callout-dark {
+    border-left-color: var(--ee-dark);
+}

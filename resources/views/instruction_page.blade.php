@@ -38,7 +38,7 @@
 <div class="split left">
   <div class="infodiv">
       <div class="centeredimg">
-      <img  src="drive\{{$drive['exam_ID']}}\candidate_photo\{{$data['reg_no']}}.png" id="img" class="centeredimg" >
+      <img  src="drive\{{$drive['exam_id']}}\candidate_photo\{{$data['reg_no']}}.png" id="img" class="centeredimg" >
   </div>
   <br><br>
   &nbsp Registration Number: <span id="reg_no">{{$data['reg_no']}}</span>
@@ -52,19 +52,19 @@
 
 <div> Select language for instructions &nbsp<select name="lang" id="LANG" onchange="instruction_langSelect(this.value)" class=tools>
 @foreach($languages as $lang)
-@if($lang['Language_name']=='English')
-   <option  value="{{$lang['Language_script']}}">{{$lang['Language_script']}}</option>
+@if($lang['language_name']=='English')
+   <option  value="{{$lang['language_script']}}">{{$lang['language_script']}}</option>
  @endif 
    @endforeach
 @foreach($languages as $lang)
-   <option  value="{{$lang['Language_script']}}">{{$lang['Language_script']}}</option>
+   <option  value="{{$lang['language_script']}}">{{$lang['language_script']}}</option>
    @endforeach
   </select></div>
 
   <div id="instruction_div">Instructions
   @foreach($inst as $ins)
-  @if($ins['Instruction_type']=="Instruction")
-  <div>{{$ins['Instruction_matter']}}
+  @if($ins['instruction_type']=="Instruction")
+  <div>{{$ins['instruction_matter']}}
   @if($ins['component']=="Brief")
   <button class="btn-primary">Previous</button>
   &nbsp; &nbsp;<button class="btn-primary">Save & Next</button>
@@ -79,7 +79,7 @@
   <div id="nav_instruction_div">
   Navigation instructions
   @foreach($inst as $ins)
-  @if($ins['Instruction_type']=="Navigation")
+  @if($ins['instruction_type']=="Navigation")
   <div>
   @if($ins['component']=="1")
   <button type="button"  class="button" onclick='GetQuestion(this.id)'>1</button>
@@ -98,7 +98,7 @@
   @endif
  
  
-  {{$ins['Instruction_matter']}}</div>
+  {{$ins['instruction_matter']}}</div>
 
   @endif
   @endforeach
@@ -109,34 +109,34 @@
 
 <span id="lang_div"> 
 @foreach($inst as $ins)
-@if($ins['Instruction_type']=="Language")
-{{$ins['Instruction_matter']}}
+@if($ins['instruction_type']=="Language")
+{{$ins['instruction_matter']}}
   @endif
   @endforeach
 
 
  </span> <span> <select name="lang" id="qLANG" onchange="qp_langSelect(this.value)" class=tools>
 @foreach($languages as $lang)
-@if($lang['Language_name']=='English')
-   <option  value="{{$lang['Language_script']}}">{{$lang['Language_script']}}</option>
+@if($lang['language_name']=='English')
+   <option  value="{{$lang['language_script']}}">{{$lang['language_script']}}</option>
  @endif 
    @endforeach
 @foreach($languages as $lang)
-   <option  value="{{$lang['Language_script']}}">{{$lang['Language_script']}}</option>
+   <option  value="{{$lang['language_script']}}">{{$lang['language_script']}}</option>
    @endforeach
   </select></span>
 <div id="TAC">
 @foreach($inst as $ins)
-  @if($ins['Instruction_type']=="T&C")
-  <div>{{$ins['Instruction_matter']}}</div>
+  @if($ins['instruction_type']=="T&C")
+  <div>{{$ins['instruction_matter']}}</div>
   
   @endif
   @endforeach
 </div>
 <span id="terms_div">
 @foreach($inst as $ins)
-  @if($ins['Instruction_type']=="Terms")
-  {{$ins['Instruction_matter']}}
+  @if($ins['instruction_type']=="Terms")
+  {{$ins['instruction_matter']}}
   @endif
   @endforeach
 </span>
@@ -154,7 +154,7 @@
 </body>
 <script type="text/javascript">
 $( document ).ready(function() {
-  str=document.getElementById("Lang").value();
+  str=document.getElementById("LANG").value;
   {document.getElementById("start_exam_btn").disabled = true;}
 
   });
@@ -181,9 +181,9 @@ function get_instructions(str)
           $('#lang_div').empty();
 
           $.each(data, function(i, data) {
-    if (data.Instruction_type=='Navigation') {
+    if (data.instruction_type=='Navigation') {
 
-        console.log(data.Instruction_matter);
+        console.log(data.instruction_matter);
         
         if(data.component==1)
         {
@@ -205,12 +205,12 @@ function get_instructions(str)
         {
           $('#nav_instruction_div').append('<span>').append('<button class=btn-primary btn-block>Save & Next</button>').append('</span>')  
         }
-        $('#nav_instruction_div').append('<span>').append(data.Instruction_matter).append('</span><br>')
+        $('#nav_instruction_div').append('<span>').append(data.instruction_matter).append('</span><br>')
         
     }
-    if (data.Instruction_type=='Instruction') {
-        console.log(data.Instruction_matter);
-        $('#instruction_div').append('<div>').append(data.Instruction_matter).append('</div>')
+    if (data.instruction_type=='Instruction') {
+        console.log(data.instruction_matter);
+        $('#instruction_div').append('<div>').append(data.instruction_matter).append('</div>')
         if(data.component=="Brief")
         {
           $('#instruction_div').append('<span>').append('&nbsp <button class=btn-primary btn-block>Previous</button>').append('</span>')  
@@ -221,17 +221,17 @@ function get_instructions(str)
         }
 
     }
-    if (data.Instruction_type=='Language') {
-        console.log(data.Instruction_matter);
-        $('#lang_div').append('<div>').append(data.Instruction_matter).append('</div>')
+    if (data.instruction_type=='Language') {
+        console.log(data.instruction_matter);
+        $('#lang_div').append('<div>').append(data.instruction_matter).append('</div>')
     }
-    if (data.Instruction_type=='Terms') {
-        console.log(data.Instruction_matter);
-        $('#terms_div').append('<div>').append(data.Instruction_matter).append('</div>')
+    if (data.instruction_type=='Terms') {
+        console.log(data.instruction_matter);
+        $('#terms_div').append('<div>').append(data.instruction_matter).append('</div>')
     }
-    if (data.Instruction_type=='T&C') {
-        console.log(data.Instruction_matter);
-        $('#TAC').append('<div>').append(data.Instruction_matter).append('</div>')
+    if (data.instruction_type=='T&C') {
+        console.log(data.instruction_matter);
+        $('#TAC').append('<div>').append(data.instruction_matter).append('</div>')
     }
 
 });

@@ -38,7 +38,7 @@
 <div class="split left">
   <div class="infodiv">
       <div>
-    <span>  <img  src="drive\{{$drive['exam_ID']}}\candidate_photo\{{$data['reg_no']}}.png" id="img" class="centeredimg" >
+    <span>  <img  src="drive\{{$drive['exam_id']}}\candidate_photo\{{$data['reg_no']}}.png" id="img" class="centeredimg" >
     </span></div>
   <br><br>
   &nbsp Registration Number: <span id="reg_no">{{$data['reg_no']}}</span>
@@ -66,23 +66,23 @@
         <legend>{{ $feed['parameter'] }}</legend>
         <div>
             <input type="radio" name="P{{$i}}" id="option1_{{ $feed['id'] }}" value="{{ $feed['option1'] }}">
-            <label for="option1_{{ $feed['Id'] }}">{{ $feed['option1'] }}</label>
+            <label for="option1_{{ $feed['id'] }}">{{ $feed['option1'] }}</label>
         </div>
         <div>
             <input type="radio" name="P{{$i}}" id="option2_{{ $feed['id'] }}" value="{{ $feed['option2'] }}">
-            <label for="option2_{{ $feed['Id'] }}">{{ $feed['option2'] }}</label>
+            <label for="option2_{{ $feed['id'] }}">{{ $feed['option2'] }}</label>
         </div>
         <div>
             <input type="radio" name="P{{$i}}" id="option3_{{ $feed['id'] }}" value="{{ $feed['option3'] }}">
-            <label for="option3_{{ $feed['Id'] }}">{{ $feed['option3'] }}</label>
+            <label for="option3_{{ $feed['id'] }}">{{ $feed['option3'] }}</label>
         </div>
         <div>
             <input type="radio" name="P{{$i}}" id="option4_{{ $feed['id'] }}" value="{{ $feed['option4'] }}">
-            <label for="option4_{{ $feed['Id'] }}">{{ $feed['option4'] }}</label>
+            <label for="option4_{{ $feed['id'] }}">{{ $feed['option4'] }}</label>
         </div>
         <div>
             <input type="radio" name="P{{$i}}" id="option5_{{ $feed['id'] }}" value="{{ $feed['option5'] }}">
-            <label for="option5_{{ $feed['Id'] }}">{{ $feed['option5'] }}</label>
+            <label for="option5_{{ $feed['id'] }}">{{ $feed['option5'] }}</label>
         </div>
     </fieldset>
     @endforeach

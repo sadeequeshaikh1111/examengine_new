@@ -2,17 +2,14 @@
 <html>
 <head>
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-<link href="{{ asset('assets\css\bootstrap.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('custom_assets/css/app.css') }}">
 <link href="{{ asset('assets\css\platform.css') }}" rel="stylesheet">
 
 <script src="{{ asset('assets\js\jquery-3.5.1.slim.min.js')}}"></script>
 <script src="{{ asset('assets\js\create_options.js')}}"></script>
 <script src="{{ asset('assets\js\Set_platform.js')}}"> pageload setup</script>
 <script src="{{ asset('assets\js\endexam.js')}}"> pageload setup</script>
-
-<script src="{{ asset('assets\js\popper.min.js')}}"></script>
-<script src="{{ asset('assets\js\bootstrap.min.js')}}"></script>
-<script src="{{ asset('assets\js\jquery.min.js')}}"></script>
+<script src="{{ asset('custom_assets/js/app.js') }}"></script>
 
 
 </head>
@@ -24,7 +21,7 @@
 <div class="split left">
   <div class="infodiv">
       <div class="centeredimg">
-  <img  src="drive\{{$drive['exam_ID']}}\candidate_photo\{{$data['reg_no']}}.png" id="img" class="centeredimg" >
+  <img  src="drive\{{$drive['exam_id']}}\candidate_photo\{{$data['reg_no']}}.png" id="img" class="centeredimg" >
   </div>
   
   Registration Number: <span id="reg_no">{{$data['reg_no']}}</span>
@@ -38,11 +35,11 @@
 
 <div id="main">
 @foreach($subs as $sub)
-<div id=div_{{$sub['Subject_name']}}>
-{{$sub['Questions']}}
-{{$sub['Subject_name']}} Questions
+<div id=div_{{$sub['subject_name']}}>
+{{$sub['questions']}}
+{{$sub['subject_name']}} Questions
 <br>
-@for($i=$sub['Qn_range_start'];$i<$sub['Questions']+$sub['Qn_range_start'];$i++)
+@for($i=$sub['qn_range_start'];$i<$sub['questions']+$sub['qn_range_start'];$i++)
  <button type="button" id={{$i}} class="button" onclick='GetQuestion(this.id)'>{{$i}}</button>
 @endfor
 </div>
@@ -59,11 +56,12 @@
   </div>
   <div class="tab">
   @foreach($subs as $sub)
-<button  onclick='get_Subject(this.id)' id={{$sub['Subject_name']}}>{{$sub['Subject_name']}}</button>
+<button  onclick='get_Subject(this.id)' id={{$sub['subject_name']}}>{{$sub['subject_name']}}</button>
 @endforeach
    <select name="lang" id="LANG" onchange="langSelect()" class=tools>
-   <option  value={{$data['Language']}}>{{$data['Language']}}</option>
-   <option  value="English">English</option>
+   @foreach($languages as $lang)
+   <option  value="{{$lang['language_script']}}">{{$lang['language_script']}}</option>
+   @endforeach
   </select>
   </div>
 <div> Question Number: <label id="qn_lbl" for="Qn"></label>
@@ -92,12 +90,10 @@ GetQuestion </div>
   <label for="option4">option4</label>
 
 </div>
-<div id="response" class><button onclick="save_next()">Mark For Review &Next</button>
+<div id="response" class><button onclick="save_next()">Save & Next</button>
 <button id="clear_btn" onclick="clear_resp()">Clear Response</button>
-<button id="save_next_btn" onclick="save_next()">Save & Next</button>
+<button id="mark_review_btn" onclick="save_next()">Mark For Review &Next</button>
 </div><br>
-<div id="endexam"><button onclick="submit_exam()">End Exam</button></div>
-</div>
 <div id="cendexam"><button onclick="getConfirmation()">End Exam</button></div>
 <div>
       <form name="end_test_form" action="end_test" method="post">
@@ -146,50 +142,50 @@ function GetQuestion(str)
 
 
 
-if(data.Qtype==1)//text question 4 radio options
+if(data.qtype==1)//text question 4 radio options
 {
-  $('#qn_lbl').html(data.SQn);
-          $('#Question_container').html(data.Question);
+  $('#qn_lbl').html(data.sqn);
+          $('#Question_container').html(data.question);
           clear_option_divs();
           generate_options(data.option1,data.option2,data.option3,data.option4);
 
     
 } 
-else if(data.Qtype==2)//text question 2 radio options  
+else if(data.qtype==2)//text question 2 radio options  
         { 
           clear_option_divs();
-          $('#qn_lbl').html(data.SQn);
-          $('#Question_container').html(data.Question);
+          $('#qn_lbl').html(data.sqn);
+          $('#Question_container').html(data.question);
         //  generate_checkboxes(data.option1,data.option2,data.option3,data.option4);
         Generate_TrueFalse_options(data.option1,data.option2);
 }
-else if(data.Qtype==3)//image question 4 radio options
+else if(data.qtype==3)//image question 4 radio options
 {  
 var drive = {!! json_encode($drive ) !!}
-var src="drive"+"\\"+drive.exam_ID+"\\images\\"+data.Qn+".png";
-var url = '{{ URL::asset('drive') }}'+"\\"+drive.exam_ID+"\\images\\"+str+data.Lang+".png";
+var src="drive"+"\\"+drive.exam_id+"\\images\\"+data.qn+".png";
+var url = '{{ URL::asset('drive') }}'+"\\"+drive.exam_id+"\\images\\"+str+data.lang+".png";
   clear_option_divs();
   $('#Question_container').html("");
 
-  $('#qn_lbl').html(data.SQn);
+  $('#qn_lbl').html(data.sqn);
   var img = document.createElement("img"); 
   img.src = url; 
   var src = document.getElementById("Question_container"); 
 src.appendChild(img); 
           generate_options(data.option1,data.option2,data.option3,data.option4);
 }
-else if(data.Qtype==4)//image question 2 radio options
+else if(data.qtype==4)//image question 2 radio options
 { 
           clear_option_divs();
-          $('#qn_lbl').html(data.SQn);
+          $('#qn_lbl').html(data.sqn);
 
           var drive = {!! json_encode($drive ) !!}
-var src="drive"+"\\"+drive.exam_ID+"\\images\\"+data.Qn+".png";
-var url = '{{ URL::asset('drive') }}'+"\\"+drive.exam_ID+"\\images\\"+data.Qn+".png";
+var src="drive"+"\\"+drive.exam_id+"\\images\\"+data.qn+".png";
+var url = '{{ URL::asset('drive') }}'+"\\"+drive.exam_id+"\\images\\"+data.qn+".png";
   clear_option_divs();
   $('#Question_container').html("");
 
-  $('#qn_lbl').html(data.SQn);
+  $('#qn_lbl').html(data.sqn);
   var img = document.createElement("img"); 
   img.src = url; 
   var src = document.getElementById("Question_container"); 
@@ -197,24 +193,24 @@ src.appendChild(img);
         //  generate_checkboxes(data.option1,data.option2,data.option3,data.option4);
         Generate_TrueFalse_options(data.option1,data.option2);
 }
-else if(data.Qtype==5)//text question 4 checkboxes 
+else if(data.qtype==5)//text question 4 checkboxes 
         { 
           clear_option_divs();
-          $('#qn_lbl').html(data.SQn);
+          $('#qn_lbl').html(data.sqn);
 
-          $('#Question_container').html(data.Question);
+          $('#Question_container').html(data.question);
           generate_checkboxes(data.option1,data.option2,data.option3,data.option4);
        // Generate_TrueFalse_options(data.option1,data.option2);
 }
-else if(data.Qtype==6)//Image question 4 checkboxes 
+else if(data.qtype==6)//Image question 4 checkboxes 
         { 
           var drive = {!! json_encode($drive ) !!}
-var src="drive"+"\\"+drive.exam_ID+"\\images\\"+data.Qn+".png";
-var url = '{{ URL::asset('drive') }}'+"\\"+drive.exam_ID+"\\images\\"+data.Qn+data.Lang+".png";
+var src="drive"+"\\"+drive.exam_id+"\\images\\"+data.qn+".png";
+var url = '{{ URL::asset('drive') }}'+"\\"+drive.exam_id+"\\images\\"+data.qn+data.lang+".png";
   clear_option_divs();
   $('#Question_container').html("");
 
-  $('#qn_lbl').html(data.SQn);
+  $('#qn_lbl').html(data.sqn);
   var img = document.createElement("img"); 
   img.src = url; 
   var src = document.getElementById("Question_container"); 
@@ -222,7 +218,7 @@ src.appendChild(img);
           generate_checkboxes(data.option1,data.option2,data.option3,data.option4);
        // Generate_TrueFalse_options(data.option1,data.option2);
 }
-console.log("SQN "+data.SQn);
+console.log("SQN "+data.sqn);
 get_Subject(data.sub);
 console.log(data.sub);
 get_selected(str,reg_no);
@@ -524,8 +520,8 @@ function langSelect()
         type: "GET",
         url: "get_time/"+reg_no,       
         success: function (data) {
-        deadtime=data.Dead;
-console.log("Time is"+data.Deads);
+        deadtime=data.dead;
+console.log("Time is"+data.dead);
 return deadtime;
 
        }

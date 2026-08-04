@@ -1,0 +1,107 @@
+/* ============================================
+   Design System - Layout
+   ============================================ */
+
+/* ---------- Content wrapper ---------- */
+.content-wrapper {
+    margin-top: var(--ee-header-height);
+    margin-left: var(--ee-sidebar-width);
+    min-height: calc(100vh - var(--ee-header-height));
+    padding: var(--ee-content-padding);
+    transition: margin-left var(--ee-transition-speed) ease;
+}
+
+.sidebar-collapsed .content-wrapper {
+    margin-left: 0;
+}
+
+@media (max-width: 991.98px) {
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* ---------- Content header ---------- */
+.content-header {
+    margin-bottom: var(--ee-space-3);
+}
+
+.content-header h1,
+.content-header .h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: var(--ee-font-weight-bold);
+    color: var(--ee-text-primary);
+}
+
+.content-header .breadcrumb {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: var(--ee-font-size-sm);
+}
+
+.content-header .breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    padding: 0 0.5rem;
+    color: var(--ee-text-muted);
+}
+
+.content-header .breadcrumb-item a {
+    color: var(--ee-primary);
+    text-decoration: none;
+}
+
+.content-header .breadcrumb-item.active {
+    color: var(--ee-text-muted);
+}
+
+/* ---------- Main content ---------- */
+.main-content {
+    padding: var(--ee-content-padding);
+}
+
+/* ---------- Content area ---------- */
+.content {
+    padding: var(--ee-content-padding);
+}
+
+/* ---------- Footer ---------- */
+.main-footer {
+    margin-left: var(--ee-sidebar-width);
+    padding: 1rem;
+    background-color: var(--ee-bg-header);
+    border-top: 1px solid var(--ee-border-color);
+    color: var(--ee-text-secondary);
+    font-size: var(--ee-font-size-sm);
+    transition: margin-left var(--ee-transition-speed) ease;
+}
+
+.sidebar-collapsed .main-footer {
+    margin-left: 0;
+}
+
+@media (max-width: 991.98px) {
+    .main-footer {
+        margin-left: 0;
+    }
+}
+
+/* ---------- Page wrapper ---------- */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Full height layout ---------- */
+.layout-fixed {
+    overflow: hidden;
+}
+
+.layout-fixed .content-wrapper {
+    overflow-y: auto;
+    height: calc(100vh - var(--ee-header-height));
+}

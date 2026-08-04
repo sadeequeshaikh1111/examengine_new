@@ -1,0 +1,210 @@
+/* ============================================
+   Design System - Sidebar
+   ============================================ */
+
+.main-sidebar {
+    position: fixed;
+    top: var(--ee-header-height);
+    left: 0;
+    bottom: 0;
+    width: var(--ee-sidebar-width);
+    z-index: 1020;
+    background-color: var(--ee-bg-sidebar);
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width var(--ee-transition-speed) ease, transform var(--ee-transition-speed) ease;
+}
+
+/* ---------- Sidebar brand ---------- */
+.brand-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--ee-white);
+    background-color: var(--ee-bg-sidebar);
+    border-bottom: 1px solid var(--ee-dark-light);
+    text-decoration: none;
+    font-weight: var(--ee-font-weight-bold);
+    font-size: var(--ee-font-size-lg);
+}
+
+.brand-link:hover {
+    color: var(--ee-white);
+    text-decoration: none;
+}
+
+.brand-image {
+    width: 33px;
+    height: 33px;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ---------- User panel ---------- */
+.user-panel {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--ee-dark-light);
+}
+
+.user-panel .image {
+    padding-right: 0.75rem;
+}
+
+.user-panel .image img {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-panel .info a {
+    color: var(--ee-text-sidebar);
+    text-decoration: none;
+    font-size: var(--ee-font-size-sm);
+}
+
+.user-panel .info a:hover {
+    color: var(--ee-text-sidebar-hover);
+}
+
+/* ---------- Sidebar navigation ---------- */
+.sidebar-nav {
+    padding: 0.5rem 0;
+    list-style: none;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item {
+    position: relative;
+    margin: 0;
+}
+
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: var(--ee-text-sidebar);
+    text-decoration: none;
+    font-size: var(--ee-font-size-sm);
+    border-left: 3px solid transparent;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-nav .nav-link:hover {
+    color: var(--ee-text-sidebar-hover);
+    background-color: var(--ee-bg-sidebar-hover);
+    text-decoration: none;
+}
+
+.sidebar-nav .nav-link.active {
+    color: var(--ee-white);
+    background-color: var(--ee-bg-sidebar-hover);
+    border-left-color: var(--ee-primary);
+}
+
+.sidebar-nav .nav-link .nav-icon {
+    width: 1.25rem;
+    margin-right: 0.5rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.sidebar-nav .nav-link p {
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- Treeview (nested menu) ---------- */
+.sidebar-nav .nav-treeview {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-nav .nav-treeview .nav-link {
+    padding-left: 2.5rem;
+    font-size: var(--ee-font-size-sm);
+}
+
+.sidebar-nav .nav-item.menu-open > .nav-treeview {
+    display: block;
+}
+
+.sidebar-nav .nav-item.menu-open > .nav-link {
+    color: var(--ee-text-sidebar-hover);
+}
+
+/* ---------- Sidebar header ---------- */
+.sidebar-header {
+    padding: 0.5rem 1rem;
+    font-size: var(--ee-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ee-text-sidebar);
+    opacity: 0.7;
+}
+
+/* ---------- Sidebar footer ---------- */
+.sidebar-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--ee-dark-light);
+}
+
+/* ---------- Collapsed state ---------- */
+.sidebar-collapsed .main-sidebar {
+    transform: translateX(-100%);
+}
+
+@media (min-width: 992px) {
+    .sidebar-collapsed .main-sidebar {
+        transform: translateX(0);
+        width: var(--ee-sidebar-collapsed-width);
+    }
+
+    .sidebar-collapsed .main-sidebar .brand-link,
+    .sidebar-collapsed .main-sidebar .user-panel,
+    .sidebar-collapsed .main-sidebar .sidebar-nav .nav-link p,
+    .sidebar-collapsed .main-sidebar .sidebar-header,
+    .sidebar-collapsed .main-sidebar .sidebar-footer {
+        display: none;
+    }
+
+    .sidebar-collapsed .main-sidebar .sidebar-nav .nav-link {
+        justify-content: center;
+        padding: 0.75rem 0;
+    }
+
+    .sidebar-collapsed .main-sidebar .sidebar-nav .nav-link .nav-icon {
+        margin-right: 0;
+    }
+}
+
+/* ---------- Mobile overlay ---------- */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1015;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-overlay.show {
+    display: block;
+}
+
+@media (min-width: 992px) {
+    .sidebar-overlay {
+        display: none !important;
+    }
+}

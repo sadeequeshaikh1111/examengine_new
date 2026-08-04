@@ -1,0 +1,109 @@
+/* ============================================
+   Design System - Auth Pages
+   Page-specific styles for login pages
+   ============================================ */
+
+/* ---------- Auth layout ---------- */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--ee-bg-body);
+    padding: var(--ee-space-3);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-card .card-body {
+    padding: var(--ee-space-4);
+}
+
+.auth-card .auth-brand {
+    text-align: center;
+    margin-bottom: var(--ee-space-4);
+}
+
+.auth-card .auth-brand .brand-title {
+    font-size: 1.5rem;
+    font-weight: var(--ee-font-weight-bold);
+    color: var(--ee-text-primary);
+    margin: 0;
+}
+
+.auth-card .auth-brand .brand-subtitle {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+    margin: var(--ee-space-1) 0 0;
+}
+
+.auth-card .auth-footer {
+    text-align: center;
+    margin-top: var(--ee-space-3);
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+}
+
+.auth-card .auth-footer a {
+    color: var(--ee-primary);
+    text-decoration: none;
+}
+
+.auth-card .auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Auth form ---------- */
+.auth-form .form-group {
+    margin-bottom: var(--ee-space-3);
+}
+
+.auth-form .form-group:last-of-type {
+    margin-bottom: var(--ee-space-4);
+}
+
+.auth-form .form-label {
+    font-weight: var(--ee-font-weight-normal);
+    color: var(--ee-text-secondary);
+    font-size: var(--ee-font-size-sm);
+}
+
+.auth-form .form-control {
+    height: calc(1.5em + 0.75rem + 2px);
+}
+
+.auth-form .btn {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-weight: var(--ee-font-weight-bold);
+}
+
+/* ---------- Auth remember row ---------- */
+.auth-remember {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--ee-space-3);
+}
+
+.auth-remember .form-check {
+    margin-bottom: 0;
+}
+
+.auth-remember .forgot-link {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-primary);
+    text-decoration: none;
+}
+
+.auth-remember .forgot-link:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Auth alert ---------- */
+.auth-alert {
+    margin-bottom: var(--ee-space-3);
+}

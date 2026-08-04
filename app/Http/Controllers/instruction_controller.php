@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\instruction;
-use App\Models\Language;
+use App\Models\language;
 
 class instruction_controller extends Controller
 {

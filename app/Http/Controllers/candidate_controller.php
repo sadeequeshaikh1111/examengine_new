@@ -12,7 +12,7 @@ use App\Models\set_b_question_paper;
 use App\Models\set_c_question_paper;
 use App\Models\set_d_question_paper;
 use App\Models\instruction;
-use App\Models\Language;
+use App\Models\language;
 use App\Models\exammasters;
 use App\Models\exam_question;
 use App\Models\subject;
@@ -278,7 +278,7 @@ else{
     }
        $data=candidate::where('reg_no',$name)->first();
      $status_update=candidate::where('reg_no',$name)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
-     $languages = Language::all();
+     $languages = language::all();
 
      $inst=instruction::where('language','English')->get();
 
@@ -304,7 +304,7 @@ function start_test(Request $request)
       $reg_no=$request->input('reg_no');
     $data=candidate::where('reg_no',$reg_no)->first();
      $status_update=candidate::where('reg_no',$reg_no)->first()->update(array_merge($request->all(), ['status' => 'Loged In']));
-     $languages = Language::all();
+     $languages = language::all();
        $subs=subject::all();    
     $drive=exammasters::where('drive_status',"running")->first();
 
@@ -396,31 +396,31 @@ return response(" created");
 
 function create_mock_qp(Request $request)
 {
-    $Language = array("English"=>"Question", "मराठी"=>"प्रश्न क्रमांक", "हिंदी"=>"सवाल क्रमांक");
+    $language = array("English"=>"Question", "मराठी"=>"प्रश्न क्रमांक", "हिंदी"=>"सवाल क्रमांक");
     
     set_a_question_paper::query()->truncate(); 
-foreach($Language as $lang)
+foreach($language as $lang)
     {
 $i=1;
 do{    $res=new set_a_question_paper;
     $res->qn=$i;
         $res->sqn=$i;
-        $res->Question='drive1'.$lang.$i;
+        $res->question='drive1'.$lang.$i;
         $res->option1="drive1 Question".$i.'option1';  
         $res->option2="drive1 Question".$i.'option2';  
         $res->option3="drive1 Question".$i.'option3';
         $res->option4="drive1 Question".$i.'option4';    
         $res->weitage='1';    
-        $res->Negative='1';    
+        $res->negative='1';    
            if($i%2==0)
         {
-        $res->Key="B"; 
+        $res->key="B"; 
         if($i%4==0)
-        {$res->Key="D";}
+        {$res->key="D";}
         }
-        else{$res->Key="A";
+        else{$res->key="A";
             if($i%3==0)
-            {$res->Key="C";}
+            {$res->key="C";}
         } 
         if($i>25)    
        { $res->sub='sub2'; 
@@ -430,12 +430,12 @@ do{    $res=new set_a_question_paper;
         { $res->sub='sub4';  }
     }          
        else{$res->sub='sub1';}
-        $res->Qtype	="1";
+        $res->qtype	="1";
         if($lang=="Question")
-      {  $res->Lang	="English";}
+      {  $res->lang	="English";}
       else if($lang=="प्रश्न क्रमांक")
-      {$res->Lang	="मराठी";}
-      else{$res->Lang	="हिंदी";}
+      {$res->lang	="मराठी";}
+      else{$res->lang	="हिंदी";}
         $res->save();
     $i++;
     }while($i<=100);
@@ -455,7 +455,7 @@ for($i=1;$i<=$count;$i++)
 
 
 $subq=subject::find($i);
-$qusetions=$subq->Questions;
+$qusetions=$subq->questions;
 $qn_range_start=$subq->qn_range_start;
 $qns=array();
 for($x=0;$x<$qusetions;$x++)
@@ -469,18 +469,18 @@ foreach( $qns as $value ) {
     $res=new set_b_question_paper;
     $res->sqn=$qn_range_start;
     $res->qn=$value;
-    $res->Question=$qp->Question.' set b';
+    $res->question=$qp->question.' set b';
     $res->option1= $qp->option1;  
     $res->option2= $qp->option2;  
     $res->option3= $qp->option3;
     $res->option4= $qp->option4;    
     $res->weitage= $qp->weitage;    
-    $res->Negative=$qp->Negative;
-    $res->Key=$qp->Key;
-    $res->Key=$qp->Negative;
+    $res->negative=$qp->negative;
+    $res->key=$qp->key;
+    $res->key=$qp->negative;
     $res->sub=$qp->sub;
-    $res->Qtype	=$qp->Qtype;
-    $res->Lang	=$qp->Lang;
+    $res->qtype	=$qp->qtype;
+    $res->lang	=$qp->lang;
     $res->save();
     $qn_range_start++;
     
@@ -489,31 +489,31 @@ foreach( $qns as $value ) {
 
 }
 $shuffled_sqn=set_b_question_paper::all();    
-$languages = set_a_question_paper::select('Lang')->distinct()->get();
+$languages = set_a_question_paper::select('lang')->distinct()->get();
 foreach($languages as $lang)
 {foreach($shuffled_sqn as $sqn)
 {
     //return DB::table('users')->where('username', $username)->pluck('groupName');
-if($lang->Lang!="English")
+if($lang->lang!="English")
 {   
    $qpb=set_b_question_paper::where('sqn',$sqn->sqn)->get()->first();
-    $qpa=set_a_question_paper::where('qn',$qpb->qn)->where('Lang',$lang->Lang)->get()->first();
+    $qpa=set_a_question_paper::where('qn',$qpb->qn)->where('lang',$lang->lang)->get()->first();
 
     $resb=new set_b_question_paper;
     $resb->sqn=$qpb->sqn;
     $resb->qn=$qpb->qn;
-    $resb->Question=$qpa->Question.' set b';
+    $resb->question=$qpa->question.' set b';
     $resb->option1= $qpa->option1;  
     $resb->option2= $qpa->option2;  
     $resb->option3= $qpa->option3;
     $resb->option4= $qpa->option4;    
     $resb->weitage= $qpa->weitage;    
-    $resb->Negative=$qpa->Negative;
-    $resb->Key=$qpa->Key;
-    $resb->Key=$qpa->Negative;
+    $resb->negative=$qpa->negative;
+    $resb->key=$qpa->key;
+    $resb->key=$qpa->negative;
     $resb->sub=$qpa->sub;
-    $resb->Qtype	=$qpa->Qtype;
-    $resb->Lang	=$qpa->Lang;
+    $resb->qtype	=$qpa->qtype;
+    $resb->lang	=$qpa->lang;
     $resb->save();
 }
 
@@ -525,13 +525,13 @@ public function set_idle(Request $request)
 
  if($request->flag==0)
     {
-         DB::table('candidates')->update(['Idle' => "True"]);
+         DB::table('candidates')->update(['idle' => "True"]);
 return response("Idle status set true Flag is: ".$request->flag);
 
     }
   else{
-        DB::table('candidates')->where('status','Loged In')->update(['Dead' =>  DB::raw('Dead+1')]);
-        DB::table('candidates')->where('Dead','>','2')->update(['status' =>  DB::raw('Locked')]);
+        DB::table('candidates')->where('status','Loged In')->update(['dead' =>  DB::raw('dead+1')]);
+        DB::table('candidates')->where('dead','>','2')->update(['status' =>  DB::raw('Locked')]);
 
 return response("Dead status set true Flag is: ".$request->flag);
     }
@@ -551,7 +551,7 @@ public function set_dead(Request $request)
 public function get_dead()
 {
 $list="";
-$data=candidate::where('Dead','>=','2')->get();
+$data=candidate::where('dead','>=','2')->get();
 
 foreach($data as $u)
 {
@@ -568,7 +568,7 @@ foreach($data as $u)
 public function get_idle()
 {
 
-$data=candidate::where('Dead','True')->get();
+$data=candidate::where('idle','True')->get();
 return $data;
 }
 

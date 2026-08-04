@@ -1,0 +1,264 @@
+/* ============================================
+   Design System - Cards
+   ============================================ */
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: var(--ee-bg-content);
+    background-clip: border-box;
+    border: 1px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius);
+    box-shadow: var(--ee-shadow-sm);
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: var(--ee-space-3);
+}
+
+.card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid var(--ee-border-color);
+}
+
+.card-header:first-child {
+    border-radius: calc(var(--ee-border-radius) - 1px) calc(var(--ee-border-radius) - 1px) 0 0;
+}
+
+.card-footer {
+    padding: 0.75rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid var(--ee-border-color);
+}
+
+.card-footer:last-child {
+    border-radius: 0 0 calc(var(--ee-border-radius) - 1px) calc(var(--ee-border-radius) - 1px);
+}
+
+.card-title {
+    margin-bottom: 0.75rem;
+    font-size: var(--ee-font-size-lg);
+    font-weight: var(--ee-font-weight-bold);
+}
+
+.card-subtitle {
+    margin-top: -0.375rem;
+    margin-bottom: 0;
+    color: var(--ee-text-muted);
+}
+
+.card-text:last-child {
+    margin-bottom: 0;
+}
+
+.card-link + .card-link {
+    margin-left: 1.25rem;
+}
+
+/* ---------- Header with tools (AdminLTE-like) ---------- */
+.card-header-tools {
+    float: right;
+    margin-top: -0.25rem;
+}
+
+.card-header-tools .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: var(--ee-font-size-sm);
+    line-height: 1;
+}
+
+/* ---------- Card variants ---------- */
+.card-primary {
+    border-top: 3px solid var(--ee-primary);
+}
+
+.card-secondary {
+    border-top: 3px solid var(--ee-secondary);
+}
+
+.card-success {
+    border-top: 3px solid var(--ee-success);
+}
+
+.card-info {
+    border-top: 3px solid var(--ee-info);
+}
+
+.card-warning {
+    border-top: 3px solid var(--ee-warning);
+}
+
+.card-danger {
+    border-top: 3px solid var(--ee-danger);
+}
+
+.card-dark {
+    border-top: 3px solid var(--ee-dark);
+}
+
+/* ---------- Card with colored header ---------- */
+.card-header-primary {
+    background-color: var(--ee-primary);
+    color: var(--ee-white);
+    border-bottom: 0;
+}
+
+.card-header-secondary {
+    background-color: var(--ee-secondary);
+    color: var(--ee-white);
+    border-bottom: 0;
+}
+
+.card-header-success {
+    background-color: var(--ee-success);
+    color: var(--ee-white);
+    border-bottom: 0;
+}
+
+.card-header-info {
+    background-color: var(--ee-info);
+    color: var(--ee-white);
+    border-bottom: 0;
+}
+
+.card-header-warning {
+    background-color: var(--ee-warning);
+    color: var(--ee-dark);
+    border-bottom: 0;
+}
+
+.card-header-danger {
+    background-color: var(--ee-danger);
+    color: var(--ee-white);
+    border-bottom: 0;
+}
+
+.card-header-dark {
+    background-color: var(--ee-dark);
+    color: var(--ee-white);
+    border-bottom: 0;
+}
+
+/* ---------- Card outline ---------- */
+.card-outline-primary {
+    border-top: 3px solid var(--ee-primary);
+}
+
+.card-outline-secondary {
+    border-top: 3px solid var(--ee-secondary);
+}
+
+.card-outline-success {
+    border-top: 3px solid var(--ee-success);
+}
+
+.card-outline-info {
+    border-top: 3px solid var(--ee-info);
+}
+
+.card-outline-warning {
+    border-top: 3px solid var(--ee-warning);
+}
+
+.card-outline-danger {
+    border-top: 3px solid var(--ee-danger);
+}
+
+/* ---------- Card sizes ---------- */
+.card-sm .card-body {
+    padding: var(--ee-space-2);
+}
+
+.card-sm .card-header {
+    padding: 0.5rem 0.75rem;
+}
+
+.card-sm .card-footer {
+    padding: 0.5rem 0.75rem;
+}
+
+/* ---------- Card groups ---------- */
+.card-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-group > .card {
+    margin-bottom: var(--ee-space-3);
+    border-radius: var(--ee-border-radius);
+}
+
+@media (min-width: 576px) {
+    .card-group {
+        flex-flow: row wrap;
+    }
+
+    .card-group > .card {
+        flex: 1 0 0%;
+        margin-bottom: 0;
+    }
+
+    .card-group > .card + .card {
+        margin-left: 0;
+        border-left: 0;
+    }
+
+    .card-group > .card:not(:first-child) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .card-group > .card:not(:last-child) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
+
+/* ---------- Card deck ---------- */
+.card-deck {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-deck .card {
+    margin-bottom: var(--ee-space-3);
+}
+
+@media (min-width: 576px) {
+    .card-deck {
+        flex-flow: row wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+
+    .card-deck .card {
+        flex: 1 0 0%;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+}
+
+/* ---------- Card columns ---------- */
+.card-columns .card {
+    margin-bottom: 0.75rem;
+}
+
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 3;
+        column-gap: 1.25rem;
+        orphans: 1;
+        widows: 1;
+    }
+
+    .card-columns .card {
+        display: inline-block;
+        width: 100%;
+    }
+}

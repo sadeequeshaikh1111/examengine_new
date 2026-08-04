@@ -1,0 +1,118 @@
+/* ============================================
+   Design System - Candidate Pages
+   Page-specific styles for candidate views
+   ============================================ */
+
+/* ---------- Candidate dashboard ---------- */
+.candidate-dashboard .welcome-card {
+    background: linear-gradient(135deg, var(--ee-primary) 0%, var(--ee-primary-dark) 100%);
+    color: var(--ee-white);
+    border: 0;
+}
+
+.candidate-dashboard .welcome-card .card-title {
+    color: var(--ee-white);
+    font-size: 1.5rem;
+}
+
+.candidate-dashboard .welcome-card .card-text {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
+}
+
+/* ---------- Candidate profile ---------- */
+.candidate-profile {
+    display: flex;
+    align-items: center;
+    padding: var(--ee-space-3);
+}
+
+.candidate-profile .profile-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    margin-right: var(--ee-space-3);
+    object-fit: cover;
+    border: 2px solid var(--ee-primary);
+}
+
+.candidate-profile .profile-name {
+    font-size: var(--ee-font-size-lg);
+    font-weight: var(--ee-font-weight-bold);
+    margin: 0;
+}
+
+.candidate-profile .profile-detail {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+    margin: 0;
+}
+
+/* ---------- Candidate exam list ---------- */
+.exam-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ee-space-3);
+    border: 1px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius);
+    margin-bottom: var(--ee-space-2);
+    background-color: var(--ee-bg-content);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.exam-list-item:hover {
+    border-color: var(--ee-primary);
+    box-shadow: var(--ee-shadow-sm);
+}
+
+.exam-list-item .exam-info {
+    flex: 1;
+}
+
+.exam-list-item .exam-name {
+    font-weight: var(--ee-font-weight-bold);
+    margin-bottom: var(--ee-space-1);
+}
+
+.exam-list-item .exam-meta {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+}
+
+.exam-list-item .exam-status {
+    margin-left: var(--ee-space-3);
+}
+
+/* ---------- Candidate status badges ---------- */
+.status-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: var(--ee-font-size-xs);
+    font-weight: var(--ee-font-weight-bold);
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--ee-border-radius);
+}
+
+.status-badge-pending {
+    color: var(--ee-warning-dark);
+    background-color: var(--ee-warning-light);
+}
+
+.status-badge-active {
+    color: var(--ee-success-dark);
+    background-color: var(--ee-success-light);
+}
+
+.status-badge-completed {
+    color: var(--ee-info-dark);
+    background-color: var(--ee-info-light);
+}
+
+.status-badge-failed {
+    color: var(--ee-danger-dark);
+    background-color: var(--ee-danger-light);
+}

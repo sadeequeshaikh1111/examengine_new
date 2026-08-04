@@ -6,7 +6,6 @@
 @extends('admin.admin_master')
     @section('title','Dasahboard')
     @section('contnet') 
-    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 <h1>Verification Desk</h1>
  
@@ -24,8 +23,6 @@
     </table>
 <script src="{{ asset('assets\js\jquery.min.js')}}"></script>
 <script src="{{ asset('assets\js\jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset('assets\js\bootstrap.min.js')}}"></script>
-<link href="{{ asset('assets\css\bootstrap.css') }}" rel="stylesheet">
 
 
 <script type="text/javascript">

@@ -1,0 +1,114 @@
+/* ============================================
+   Design System - Admin Pages
+   Page-specific styles for admin panel views
+   ============================================ */
+
+/* ---------- Admin dashboard ---------- */
+.admin-dashboard .stat-card {
+    display: flex;
+    align-items: center;
+    padding: var(--ee-space-3);
+}
+
+.admin-dashboard .stat-card .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-right: var(--ee-space-3);
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: var(--ee-white);
+}
+
+.admin-dashboard .stat-card .stat-value {
+    font-size: 1.5rem;
+    font-weight: var(--ee-font-weight-bold);
+    line-height: 1.2;
+}
+
+.admin-dashboard .stat-card .stat-label {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+}
+
+/* ---------- Admin tables ---------- */
+.admin-table-wrap {
+    padding: 0;
+}
+
+.admin-table-wrap .table {
+    margin-bottom: 0;
+}
+
+.admin-table-wrap .table thead th {
+    background-color: var(--ee-light);
+    border-bottom: 2px solid var(--ee-border-color);
+    font-size: var(--ee-font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* ---------- Admin forms ---------- */
+.admin-form-card .card-body {
+    padding: var(--ee-space-4);
+}
+
+.admin-form-card .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* ---------- Admin filters bar ---------- */
+.admin-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ee-space-2);
+    padding: var(--ee-space-3);
+    background-color: var(--ee-bg-content);
+    border: 1px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius);
+    margin-bottom: var(--ee-space-3);
+}
+
+.admin-filters .form-control,
+.admin-filters .custom-select {
+    width: auto;
+    min-width: 150px;
+}
+
+/* ---------- Admin action buttons ---------- */
+.admin-actions {
+    display: flex;
+    gap: var(--ee-space-1);
+    justify-content: flex-end;
+}
+
+/* ---------- Admin user panel ---------- */
+.admin-user-panel {
+    display: flex;
+    align-items: center;
+    padding: var(--ee-space-3);
+    background-color: var(--ee-bg-content);
+    border: 1px solid var(--ee-border-color);
+    border-radius: var(--ee-border-radius);
+    margin-bottom: var(--ee-space-3);
+}
+
+.admin-user-panel .user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-right: var(--ee-space-2);
+    object-fit: cover;
+}
+
+.admin-user-panel .user-name {
+    font-weight: var(--ee-font-weight-bold);
+}
+
+.admin-user-panel .user-role {
+    font-size: var(--ee-font-size-sm);
+    color: var(--ee-text-muted);
+}

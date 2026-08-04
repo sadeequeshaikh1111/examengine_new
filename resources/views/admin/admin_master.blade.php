@@ -6,26 +6,10 @@
     <title>@yield('title')</title>
      <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bbootstrap 4 -->
-  <link rel="stylesheet" href="{{asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="{{asset('plugins/jqvmap/jqvmap.min.css')}}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}}">
-  <!-- summernote -->
-  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Custom Assets -->
+  <link rel="stylesheet" href="{{ asset('custom_assets/css/app.css') }}">
 </head>
 <body class="sidebar-mini layout-fixed sidebar-open">
      <!-- Navbar -->
@@ -164,12 +148,7 @@ Dashboard                <i class="right fas fa-angle-left"></i>
 <!-- css for colapse is sidebar-mini layout-fixed sidebar-closed sidebar-collapse-->
 <!--css for normal body sidebar-mini layout-fixed sidebar-open-->
 </body>
-<!-- jQuery -->
-<!-- Bootstrap 4 -->
-<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<!-- AdminLTE App -->
-<script src="{{asset('/dist/js/adminlte.min.js')}}"></script>
+<!-- Custom Assets -->
+<script src="{{ asset('custom_assets/js/app.js') }}"></script>
 
-
-</script>
 </html>

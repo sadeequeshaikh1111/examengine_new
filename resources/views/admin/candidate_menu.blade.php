@@ -7,9 +7,6 @@
     @section('title','Dasahboard')
     @section('contnet')
     {{session('user')}}
-    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="{{ asset('assets\css\bootstrap.css') }}" rel="stylesheet">
-<link href="{{ asset('assets\css\platform.css') }}" rel="stylesheet">
    
 
 <div id="locked_candidates">
@@ -39,8 +36,6 @@
 
 <script src="{{ asset('assets\js\jquery.min.js')}}"></script>
 <script src="{{ asset('assets\js\jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset('assets\js\bootstrap.min.js')}}"></script>
-<link href="{{ asset('assets\css\bootstrap.css') }}" rel="stylesheet">
 
 
 <script type="text/javascript">

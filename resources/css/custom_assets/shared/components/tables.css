@@ -1,0 +1,212 @@
+/* ============================================
+   Design System - Tables
+   ============================================ */
+
+.table {
+    width: 100%;
+    margin-bottom: var(--ee-space-3);
+    color: var(--ee-text-primary);
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid var(--ee-border-color);
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--ee-border-color);
+    font-weight: var(--ee-font-weight-bold);
+    background-color: var(--ee-light);
+}
+
+.table tbody + tbody {
+    border-top: 2px solid var(--ee-border-color);
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.3rem;
+}
+
+/* ---------- Bordered ---------- */
+.table-bordered {
+    border: 1px solid var(--ee-border-color);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid var(--ee-border-color);
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+    border-bottom-width: 2px;
+}
+
+/* ---------- Borderless ---------- */
+.table-borderless th,
+.table-borderless td,
+.table-borderless thead th,
+.table-borderless tbody + tbody {
+    border: 0;
+}
+
+/* ---------- Striped ---------- */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Hover ---------- */
+.table-hover tbody tr:hover {
+    color: var(--ee-text-primary);
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+/* ---------- Active row ---------- */
+.table .thead-dark th {
+    color: var(--ee-white);
+    background-color: var(--ee-dark);
+    border-color: var(--ee-dark-light);
+}
+
+.table .thead-light th {
+    color: var(--ee-text-primary);
+    background-color: var(--ee-light);
+    border-color: var(--ee-border-color);
+}
+
+/* ---------- Contextual rows ---------- */
+.table-primary,
+.table-primary > th,
+.table-primary > td {
+    background-color: var(--ee-primary-light);
+}
+
+.table-secondary,
+.table-secondary > th,
+.table-secondary > td {
+    background-color: var(--ee-secondary-light);
+}
+
+.table-success,
+.table-success > th,
+.table-success > td {
+    background-color: var(--ee-success-light);
+}
+
+.table-info,
+.table-info > th,
+.table-info > td {
+    background-color: var(--ee-info-light);
+}
+
+.table-warning,
+.table-warning > th,
+.table-warning > td {
+    background-color: var(--ee-warning-light);
+}
+
+.table-danger,
+.table-danger > th,
+.table-danger > td {
+    background-color: var(--ee-danger-light);
+}
+
+.table-light,
+.table-light > th,
+.table-light > td {
+    background-color: var(--ee-light);
+}
+
+.table-dark,
+.table-dark > th,
+.table-dark > td {
+    background-color: var(--ee-dark);
+    color: var(--ee-white);
+}
+
+/* ---------- Responsive wrapper ---------- */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive > .table-bordered {
+    border: 0;
+}
+
+@media (max-width: 575.98px) {
+    .table-responsive-sm {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive-sm > .table-bordered {
+        border: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive-md > .table-bordered {
+        border: 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .table-responsive-lg {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive-lg > .table-bordered {
+        border: 0;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .table-responsive-xl {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive-xl > .table-bordered {
+        border: 0;
+    }
+}
+
+/* ---------- Compact (AdminLTE-like) ---------- */
+.table-compact th,
+.table-compact td {
+    padding: 0.4rem 0.6rem;
+    font-size: var(--ee-font-size-sm);
+}
+
+/* ---------- Table actions column ---------- */
+.table-actions {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.table-actions .btn {
+    margin-left: 0.25rem;
+}

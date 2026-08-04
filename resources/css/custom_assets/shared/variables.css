@@ -1,0 +1,89 @@
+/* ============================================
+   Design System - CSS Variables
+   Lightweight replacement for AdminLTE
+   ============================================ */
+
+:root {
+    /* ---------- Colors ---------- */
+    --ee-primary: #007bff;
+    --ee-primary-dark: #0056b3;
+    --ee-primary-light: #e7f1ff;
+
+    --ee-secondary: #6c757d;
+    --ee-secondary-dark: #545b62;
+    --ee-secondary-light: #e2e3e5;
+
+    --ee-success: #28a745;
+    --ee-success-dark: #1e7e34;
+    --ee-success-light: #d4edda;
+
+    --ee-info: #17a2b8;
+    --ee-info-dark: #117a8b;
+    --ee-info-light: #d1ecf1;
+
+    --ee-warning: #ffc107;
+    --ee-warning-dark: #d39e00;
+    --ee-warning-light: #fff3cd;
+
+    --ee-danger: #dc3545;
+    --ee-danger-dark: #bd2130;
+    --ee-danger-light: #f8d7da;
+
+    --ee-dark: #343a40;
+    --ee-dark-light: #454d55;
+
+    --ee-light: #f8f9fa;
+    --ee-white: #ffffff;
+
+    /* ---------- Backgrounds ---------- */
+    --ee-bg-body: #f4f6f9;
+    --ee-bg-sidebar: #343a40;
+    --ee-bg-sidebar-hover: #454d55;
+    --ee-bg-sidebar-active: #007bff;
+    --ee-bg-header: #ffffff;
+    --ee-bg-content: #ffffff;
+
+    /* ---------- Text ---------- */
+    --ee-text-primary: #212529;
+    --ee-text-secondary: #6c757d;
+    --ee-text-muted: #6c757d;
+    --ee-text-sidebar: #c2c7d0;
+    --ee-text-sidebar-hover: #ffffff;
+    --ee-text-header: #343a40;
+
+    /* ---------- Borders ---------- */
+    --ee-border-color: #dee2e6;
+    --ee-border-radius: 0.25rem;
+    --ee-border-radius-sm: 0.2rem;
+    --ee-border-radius-lg: 0.3rem;
+
+    /* ---------- Spacing ---------- */
+    --ee-space-1: 0.25rem;
+    --ee-space-2: 0.5rem;
+    --ee-space-3: 1rem;
+    --ee-space-4: 1.5rem;
+    --ee-space-5: 3rem;
+
+    /* ---------- Typography ---------- */
+    --ee-font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --ee-font-size-base: 1rem;
+    --ee-font-size-sm: 0.875rem;
+    --ee-font-size-lg: 1.25rem;
+    --ee-font-size-xs: 0.75rem;
+    --ee-font-weight-light: 300;
+    --ee-font-weight-normal: 400;
+    --ee-font-weight-bold: 700;
+    --ee-line-height-base: 1.5;
+
+    /* ---------- Shadows ---------- */
+    --ee-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --ee-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --ee-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+
+    /* ---------- Layout ---------- */
+    --ee-sidebar-width: 250px;
+    --ee-sidebar-collapsed-width: 0px;
+    --ee-header-height: 50px;
+    --ee-content-padding: 1.25rem;
+    --ee-transition-speed: 0.3s;
+}

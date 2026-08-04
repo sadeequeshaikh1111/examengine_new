@@ -24,10 +24,179 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use PDO;
 
 
 class file_controller extends Controller
 {
+    /**
+     * Convert a MySQL dump file into PostgreSQL-compatible SQL and execute it.
+     *
+     * MySQL dumps use backticks for identifiers and MySQL-specific comments
+     * (e.g. /*!40000 ... *\/) which PostgreSQL cannot parse. Also, the PDO
+     * pgsql driver does not support multiple statements in a single call,
+     * so each statement is executed individually.
+     *
+     * @param string $filePath Absolute path to the MySQL dump file.
+     * @return void
+     */
+    private function importMysqlDumpToPostgres($filePath)
+    {
+        if (!file_exists($filePath)) {
+            throw new \Exception("SQL file not found: {$filePath}");
+        }
+
+        $sql = file_get_contents($filePath);
+
+        // 1. Remove MySQL version-specific comments: /*!40000 ... */
+        $sql = preg_replace('/\/\*!\d+.*?\*\//s', '', $sql);
+
+        // 2. Remove MySQL ALTER TABLE ... DISABLE/ENABLE KEYS statements
+        $sql = preg_replace('/ALTER TABLE `[^`]+` DISABLE KEYS\s*;/i', '', $sql);
+        $sql = preg_replace('/ALTER TABLE `[^`]+` ENABLE KEYS\s*;/i', '', $sql);
+
+        // 3. Convert backtick-quoted identifiers to double-quoted identifiers
+        //    and lowercase them. PostgreSQL folds unquoted identifiers to
+        //    lowercase, and the MySQL dumps use PascalCase column names
+        //    (e.g. Subject_name, Qn_range_start) that must match the
+        //    lowercase PostgreSQL column names. Reserved words like "key"
+        //    are quoted so PostgreSQL accepts them.
+        $sql = preg_replace_callback('/`([^`]+)`/', function ($m) {
+            return '"' . strtolower($m[1]) . '"';
+        }, $sql);
+
+        // 4. Remove MySQL-specific "SET" session directives that are not
+        //    valid in PostgreSQL (e.g. SET CHARACTER SET, SET NAMES, etc.)
+        $sql = preg_replace('/^\s*SET\s+[^;]+;/mi', '', $sql);
+
+        // 5. Remove MySQL transaction control statements that are not
+        //    needed for data import.
+        $sql = preg_replace('/^\s*START TRANSACTION\s*;/mi', '', $sql);
+        $sql = preg_replace('/^\s*COMMIT\s*;/mi', '', $sql);
+
+        // 6. Handle the candidates table. The MySQL dump omits the
+        //    candidate_feedback column (14 values per row) but the
+        //    PostgreSQL table has 15 columns with candidate_feedback
+        //    NOT NULL and no default. Add a default and rewrite the
+        //    INSERT to use an explicit column list so PostgreSQL uses
+        //    the default for the missing column.
+        $pdo = DB::connection()->getPdo();
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+        try {
+            $pdo->exec("ALTER TABLE candidates ALTER COLUMN candidate_feedback SET DEFAULT ''");
+        } catch (\PDOException $e) {
+            // Column may already have a default; ignore.
+        }
+
+        $sql = preg_replace(
+            '/INSERT INTO\s+"?candidates"?\s+VALUES/i',
+            'INSERT INTO "candidates" ("reg_no", "name", "node", "status", "dob", "time", "qpset", "marks", "language", "current_qn", "dead", "idle", "created_at", "updated_at") VALUES',
+            $sql
+        );
+
+        // 7. Split the SQL into individual statements by semicolons.
+        //    We must respect string literals (single quotes) so that a ';'
+        //    inside a string value does not split the statement.
+        $statements = $this->splitSqlStatements($sql);
+
+        foreach ($statements as $statement) {
+            $statement = trim($statement);
+            if ($statement === '' || strtoupper(substr($statement, 0, 6)) === 'LOCK ' || strtoupper(substr($statement, 0, 8)) === 'UNLOCK ') {
+                continue;
+            }
+
+            // Skip pure comment lines
+            if (strpos($statement, '--') === 0 || strpos($statement, '#') === 0) {
+                continue;
+            }
+
+            try {
+                $pdo->exec($statement);
+            } catch (\PDOException $e) {
+                // Log and continue; some statements may be unsupported directives.
+                // But throw for actual INSERT failures so the caller knows.
+                if (stripos($statement, 'INSERT') === 0) {
+                    throw new \Exception("Failed to execute statement: {$e->getMessage()} \nSQL: " . substr($statement, 0, 500));
+                }
+                // Non-INSERT statements that fail (e.g. SET directives) are ignored.
+            }
+        }
+
+        // 8. Reset sequences to avoid unique constraint violations on subsequent inserts.
+        $this->resetPostgresSequences();
+    }
+
+    /**
+     * Split SQL into individual statements respecting string literals.
+     */
+    private function splitSqlStatements($sql)
+    {
+        $statements = [];
+        $current = '';
+        $len = strlen($sql);
+        $inString = false;
+
+        for ($i = 0; $i < $len; $i++) {
+            $char = $sql[$i];
+
+            if ($inString) {
+                $current .= $char;
+                if ($char === '\\' && $i + 1 < $len) {
+                    // Handle escaped character in MySQL string
+                    $current .= $sql[++$i];
+                } elseif ($char === "'") {
+                    // Check for doubled single quote ('' escape)
+                    if ($i + 1 < $len && $sql[$i + 1] === "'") {
+                        $current .= $sql[++$i];
+                    } else {
+                        $inString = false;
+                    }
+                }
+                continue;
+            }
+
+            if ($char === "'") {
+                $inString = true;
+                $current .= $char;
+            } elseif ($char === ';') {
+                $statements[] = $current;
+                $current = '';
+            } else {
+                $current .= $char;
+            }
+        }
+
+        if (trim($current) !== '') {
+            $statements[] = $current;
+        }
+
+        return $statements;
+    }
+
+    /**
+     * Reset PostgreSQL sequences for the tables that were truncated/imported.
+     */
+    private function resetPostgresSequences()
+    {
+        $tables = [
+            'candidates',
+            'set_a_question_papers',
+            'set_b_question_papers',
+            'set_c_question_papers',
+            'set_d_question_papers',
+            'subjects',
+        ];
+
+        foreach ($tables as $table) {
+            $seq = "{$table}_id_seq";
+            try {
+                DB::statement("SELECT setval('{$seq}', COALESCE((SELECT MAX(id) FROM {$table}), 1))");
+            } catch (\Exception $e) {
+                // Ignore missing sequences/tables
+            }
+        }
+    }
     function set_drive()
 {
 
@@ -251,7 +420,7 @@ else if($r->status=="Backup Done"){
 else if($r->status=="set_qp"){
    
 
-    DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql')));
+    $this->importMysqlDumpToPostgres(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql'));
 
   $data=exammaster::where('exam_id',$r->exam_id)->first()->update(["drive_status"=>"set_qp"]);
     return response()->json($r->exam_id."Question paper sets created", 200);
@@ -555,8 +724,8 @@ DB::table('subjects')->truncate();
 
 
 
-DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql')));
-DB::unprepared(file_get_contents(\public_path('drive/'.$r->exam_id.'/qp'.'/'.$r->exam_id.'_Qp.sql')));
+$this->importMysqlDumpToPostgres(\public_path('drive/'.$r->exam_id.'/'.$r->exam_id.'_candidates.sql'));
+$this->importMysqlDumpToPostgres(\public_path('drive/'.$r->exam_id.'/qp'.'/'.$r->exam_id.'_Qp.sql'));
 $exam = exammaster::where('exam_id', $r->exam_id)->first();
 $exam->drive_status = "Question Bank Set";
 $exam->save();

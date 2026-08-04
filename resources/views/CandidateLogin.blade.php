@@ -3,98 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Login</title>
- <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bbootstrap 4 -->
-  <link rel="stylesheet" href="{{asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="{{asset('plugins/jqvmap/jqvmap.min.css')}}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}}">
-  <!-- summernote -->
-  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
+    <title>Login</title>
+
+    <link href="{{ asset('assets\css\bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets\css\candidate_logincss.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets\js\jquery-3.5.1.slim.min.js')}}"></script>
+    <script src="{{ asset('assets\js\popper.min.js')}}"></script>
+    <script src="{{ asset('assets\js\bootstrap.min.js')}}"></script>
 </head>
-  <body class="login-page" style="min-height: 600.391px;">
-<div class="login-box">
-  <div class="login-logo">
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+<body class="auth-page">
+    <div class="auth-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="auth-brand">
+                    <p class="brand-subtitle">Sign in to start your session</p>
+                </div>
 
-      <form action="candidate_login" method="post" id="quickForm" >
-      @csrf
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="name" placeholder="User_Id" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
+                <form action="candidate_login" method="post" class="auth-form">
+                    @csrf
+                    <div class="form-group">
+                        <label for="name" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="User_Id" required>
+                    </div>
 
-      
-      <!-- /.social-auth-links -->
-@if($message=Session::get('msg'))
-<div>{{$message}}</div>
-@endif
-      @if (count($errors)>0)
-@foreach($errors->all() as $error )
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    </div>
 
-<div class="alert alert-danger">
-        <ul>
-            <li>{!! $error !!}</li>
-        </ul>
+
+
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+
+                @if ($message = Session::get('msg'))
+                    <div class="alert alert-danger auth-alert">{{ $message }}</div>
+                @endif
+
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger auth-alert">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{!! $error !!}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
-    @endforeach
-@endif
-      
-    </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
-<!-- /.login-box -->
-
-<!-- jQuery -->
-<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<!-- AdminLTE App -->
-<script src="{{asset('/dist/js/adminlte.min.js')}}"></script>
-
-
 </body>
 </html>
