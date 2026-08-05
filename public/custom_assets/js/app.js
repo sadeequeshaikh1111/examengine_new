@@ -7,58 +7,139 @@
 (function () {
     'use strict';
 
+    var STORAGE_KEY = 'ee_sidebar_state';
+    var STORAGE_SECTION_KEY = 'ee_sidebar_section';
+
     /* ============================================
        Sidebar
        ============================================ */
 
-    function initSidebarToggle() {
-        // Custom data-sidebar-toggle
-        var togglers = document.querySelectorAll('[data-sidebar-toggle]');
-        togglers.forEach(function (toggler) {
-            toggler.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.body.classList.toggle('sidebar-collapsed');
-            });
-        });
+    function getCurrentPage() {
+        var path = window.location.pathname;
+        var segments = path.split('/').filter(Boolean);
+        return segments.length > 0 ? segments[segments.length - 1] : 'dashboard';
+    }
 
-        // AdminLTE compatibility: data-widget="pushmenu"
-        var pushmenus = document.querySelectorAll('[data-widget="pushmenu"]');
-        pushmenus.forEach(function (toggler) {
-            toggler.addEventListener('click', function (e) {
-                e.preventDefault();
+    function initSidebarToggle() {
+        var toggler = document.getElementById('sidebarToggle');
+        if (!toggler) {
+            // Fallback to data attributes
+            toggler = document.querySelector('[data-sidebar-toggle]') || document.querySelector('[data-widget="pushmenu"]');
+        }
+        if (!toggler) return;
+
+        toggler.addEventListener('click', function (e) {
+            e.preventDefault();
+            var isMobile = window.innerWidth <= 991.98;
+
+            if (isMobile) {
+                document.body.classList.toggle('sidebar-mobile-open');
+                var overlay = document.getElementById('sidebarOverlay');
+                if (overlay) overlay.classList.toggle('show');
+            } else {
                 document.body.classList.toggle('sidebar-collapsed');
+                var collapsed = document.body.classList.contains('sidebar-collapsed');
+                try {
+                    localStorage.setItem(STORAGE_KEY, collapsed ? 'collapsed' : 'expanded');
+                } catch (err) {}
+            }
+        });
+    }
+
+    function initSubmenuAccordion() {
+        var parents = document.querySelectorAll('.sidebar-menu .nav-parent');
+        // Fallback for old treeview structure
+        if (!parents.length) {
+            parents = document.querySelectorAll('.sidebar-nav .nav-item.has-treeview > .nav-link');
+        }
+
+        parents.forEach(function (parent) {
+            parent.addEventListener('click', function (e) {
+                e.preventDefault();
+                var navItem = parent.closest('.nav-item');
+                if (!navItem) return;
+
+                var isOpen = navItem.classList.contains('submenu-open') || navItem.classList.contains('menu-open');
+
+                var selector = navItem.classList.contains('has-submenu') ? '.sidebar-menu .nav-item.submenu-open' : '.sidebar-nav .nav-item.menu-open';
+                var allOpenItems = document.querySelectorAll(selector);
+                allOpenItems.forEach(function (item) {
+                    if (item !== navItem) {
+                        item.classList.remove('submenu-open', 'menu-open');
+                    }
+                });
+
+                if (isOpen) {
+                    navItem.classList.remove('submenu-open', 'menu-open');
+                } else {
+                    navItem.classList.add('submenu-open', 'menu-open');
+                }
+
+                var section = parent.getAttribute('data-section');
+                try {
+                    if (section) localStorage.setItem(STORAGE_SECTION_KEY, section);
+                } catch (err) {}
             });
         });
     }
 
-    function initTreeview() {
-        // Custom .sidebar-nav
-        var treeviewToggles = document.querySelectorAll('.sidebar-nav .nav-item.has-treeview > .nav-link');
-        treeviewToggles.forEach(function (toggle) {
-            toggle.addEventListener('click', function (e) {
-                e.preventDefault();
-                var parent = toggle.parentElement;
-                parent.classList.toggle('menu-open');
-            });
+    function initActivePage() {
+        var currentPage = getCurrentPage();
+        var activeLink = null;
+        var links = document.querySelectorAll('.sidebar-menu .nav-link[data-page], .sidebar-nav .nav-link[data-page]');
+
+        links.forEach(function (link) {
+            var page = link.getAttribute('data-page');
+            if (page === currentPage) activeLink = link;
         });
 
-        // AdminLTE compatibility: data-widget="treeview"
-        var adminTreeviews = document.querySelectorAll('[data-widget="treeview"] .nav-item.has-treeview > .nav-link');
-        adminTreeviews.forEach(function (toggle) {
-            toggle.addEventListener('click', function (e) {
-                e.preventDefault();
-                var parent = toggle.parentElement;
-                parent.classList.toggle('menu-open');
-            });
-        });
+        if (!activeLink) return;
+        activeLink.classList.add('active');
+
+        var parentItem = activeLink.closest('.nav-item.has-submenu, .nav-item.has-treeview');
+        if (parentItem) {
+            parentItem.classList.add('submenu-open', 'menu-open');
+        }
+    }
+
+    function restoreSidebarState() {
+        try {
+            var state = localStorage.getItem(STORAGE_KEY);
+            if (state === 'collapsed' && window.innerWidth > 991.98) {
+                document.body.classList.add('sidebar-collapsed');
+            }
+        } catch (err) {}
+
+        var hasActiveSection = document.querySelector('.sidebar-menu .nav-item.submenu-open, .sidebar-nav .nav-item.menu-open');
+        if (hasActiveSection) return;
+
+        try {
+            var section = localStorage.getItem(STORAGE_SECTION_KEY);
+            if (section) {
+                var parent = document.querySelector('.sidebar-menu .nav-parent[data-section="' + section + '"]');
+                if (parent) {
+                    parent.closest('.nav-item').classList.add('submenu-open', 'menu-open');
+                }
+            }
+        } catch (err) {}
     }
 
     function initSidebarOverlay() {
-        var overlay = document.querySelector('.sidebar-overlay');
+        var overlay = document.getElementById('sidebarOverlay');
         if (!overlay) return;
         overlay.addEventListener('click', function () {
-            document.body.classList.remove('sidebar-collapsed');
+            document.body.classList.remove('sidebar-mobile-open');
             overlay.classList.remove('show');
+        });
+    }
+
+    function initResizeHandler() {
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 991.98) {
+                document.body.classList.remove('sidebar-mobile-open');
+                var overlay = document.getElementById('sidebarOverlay');
+                if (overlay) overlay.classList.remove('show');
+            }
         });
     }
 
@@ -101,8 +182,7 @@
     }
 
     function initDropdowns() {
-        // Custom data-dropdown-toggle
-        var toggles = document.querySelectorAll('[data-dropdown-toggle]');
+        var toggles = document.querySelectorAll('[data-dropdown-toggle], [data-toggle="dropdown"]');
         toggles.forEach(function (toggle) {
             toggle.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -120,29 +200,7 @@
             });
         });
 
-        // AdminLTE compatibility: data-toggle="dropdown"
-        var adminToggles = document.querySelectorAll('[data-toggle="dropdown"]');
-        adminToggles.forEach(function (toggle) {
-            toggle.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var dropdown = toggle.closest('.dropdown');
-                if (!dropdown) return;
-                var menu = dropdown.querySelector('.dropdown-menu');
-                if (!menu) return;
-                var isOpen = menu.classList.contains('show');
-                closeAllDropdowns();
-                if (!isOpen) {
-                    menu.classList.add('show');
-                    dropdown.classList.add('show');
-                }
-            });
-        });
-
-        document.addEventListener('click', function () {
-            closeAllDropdowns();
-        });
-
+        document.addEventListener('click', function () { closeAllDropdowns(); });
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeAllDropdowns();
         });
@@ -173,9 +231,7 @@
                 }
             });
             form.querySelectorAll('.is-invalid').forEach(function (field) {
-                field.addEventListener('input', function () {
-                    field.classList.remove('is-invalid');
-                });
+                field.addEventListener('input', function () { field.classList.remove('is-invalid'); });
             });
         });
     }
@@ -263,7 +319,6 @@
        ============================================ */
 
     function initCardWidgets() {
-        // Collapse card: data-card-widget="collapse"
         var collapseButtons = document.querySelectorAll('[data-card-widget="collapse"]');
         collapseButtons.forEach(function (button) {
             button.addEventListener('click', function (e) {
@@ -276,7 +331,6 @@
             });
         });
 
-        // Remove card: data-card-widget="remove"
         var removeButtons = document.querySelectorAll('[data-card-widget="remove"]');
         removeButtons.forEach(function (button) {
             button.addEventListener('click', function (e) {
@@ -286,7 +340,6 @@
             });
         });
 
-        // Chat pane toggle: data-widget="chat-pane-toggle"
         var chatToggles = document.querySelectorAll('[data-widget="chat-pane-toggle"]');
         chatToggles.forEach(function (button) {
             button.addEventListener('click', function (e) {
@@ -300,20 +353,12 @@
         });
     }
 
-    /* ============================================
-       AdminLTE Compatibility - Tooltips
-       ============================================ */
-
     function initTooltips() {
         var tooltips = document.querySelectorAll('[data-toggle="tooltip"]');
         tooltips.forEach(function (el) {
             el.setAttribute('title', el.getAttribute('title') || el.getAttribute('data-original-title') || '');
         });
     }
-
-    /* ============================================
-       AdminLTE Compatibility - Tabs
-       ============================================ */
 
     function initTabs() {
         var tabLinks = document.querySelectorAll('[data-toggle="tab"]');
@@ -322,25 +367,16 @@
                 e.preventDefault();
                 var target = document.querySelector(link.getAttribute('href'));
                 if (!target) return;
-
-                // Deactivate siblings
                 var tabPane = link.closest('.tab-content') || link.closest('.card');
                 if (tabPane) {
                     var allPanes = tabPane.querySelectorAll('.tab-pane');
-                    allPanes.forEach(function (pane) {
-                        pane.classList.remove('active');
-                    });
+                    allPanes.forEach(function (pane) { pane.classList.remove('active'); });
                 }
-
-                // Deactivate all nav links in the same nav
                 var nav = link.closest('.nav');
                 if (nav) {
                     var allLinks = nav.querySelectorAll('.nav-link');
-                    allLinks.forEach(function (l) {
-                        l.classList.remove('active');
-                    });
+                    allLinks.forEach(function (l) { l.classList.remove('active'); });
                 }
-
                 target.classList.add('active');
                 link.classList.add('active');
             });
@@ -353,8 +389,11 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         initSidebarToggle();
-        initTreeview();
+        initSubmenuAccordion();
+        initActivePage();
+        restoreSidebarState();
         initSidebarOverlay();
+        initResizeHandler();
         initDismissibleAlerts();
         initAutoDismiss();
         initDropdowns();

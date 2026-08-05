@@ -178,6 +178,17 @@ Route::get('/drive_menu', function () {
     }
 });
 
+//drive utilities route
+Route::get('/drive_utilities', function () {
+    if(session()->has('user'))
+    {return view('admin.drive_utilities');
+    }
+    else
+    {
+    return view('admin.admin_login');
+    }
+});
+
 
 Route::get('/drive_downloader', function () {
     if(session()->has('user'))

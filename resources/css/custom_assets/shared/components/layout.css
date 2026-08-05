@@ -11,13 +11,13 @@
     transition: margin-left var(--ee-transition-speed) ease;
 }
 
-.sidebar-collapsed .content-wrapper {
-    margin-left: 0;
+body.sidebar-collapsed .content-wrapper {
+    margin-left: var(--ee-sidebar-collapsed-width);
 }
 
 @media (max-width: 991.98px) {
     .content-wrapper {
-        margin-left: 0;
+        margin-left: 0 !important;
     }
 }
 
@@ -79,13 +79,13 @@
     transition: margin-left var(--ee-transition-speed) ease;
 }
 
-.sidebar-collapsed .main-footer {
-    margin-left: 0;
+body.sidebar-collapsed .main-footer {
+    margin-left: var(--ee-sidebar-collapsed-width);
 }
 
 @media (max-width: 991.98px) {
     .main-footer {
-        margin-left: 0;
+        margin-left: 0 !important;
     }
 }
 

@@ -82,7 +82,7 @@
 
     /* ---------- Layout ---------- */
     --ee-sidebar-width: 250px;
-    --ee-sidebar-collapsed-width: 0px;
+    --ee-sidebar-collapsed-width: 60px;
     --ee-header-height: 50px;
     --ee-content-padding: 1.25rem;
     --ee-transition-speed: 0.3s;

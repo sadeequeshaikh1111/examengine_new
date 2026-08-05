@@ -5,78 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
-
-<meta http-equiv="Content-Language" content="en">
-    <title>Document</title>
+    <meta http-equiv="Content-Language" content="en">
+    <title>Drive Management</title>
 </head>
 <body>
 @extends('admin.admin_master')
-    @section('title','Exam Menu')
-    @section('contnet') 
-<div>
-<div class="card" style="width: 30rem;">
-<label for="admin"> {{session('email')}}</label>
+    @section('title','Drive Management')
+    @section('contnet')
 
+    <div class="admin-dashboard">
+        <!-- Drive table -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Downloaded Drives</h3>
+            </div>
+            <div class="card-body admin-table-wrap">
+                <table id="drive_table" class="table table-bordered yajra-datatable" style="width:100%; table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th>Exam Name</th>
+                            <th>Exam ID</th>
+                            <th>Drive Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
 
+        <!-- Drive details -->
+        <div id="drive_detail" class="card mt-3">
+            <div class="card-header">
+                <h3 class="card-title">Drive Details</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-0">Select a drive from the table above to view its details and manage its lifecycle.</p>
+            </div>
+        </div>
+    </div>
 
-  </div>
-  <div>
-  <div class="row">
-  <div class="column" >
-    <h2>Column 1</h2>
-   <form action="upload" method="post" enctype="multipart/form-data">
-{{ csrf_field() }}
-<input type="file"  name="file" required><br><br>
-
-<input type="text" id="drive_shift" name="shift" placeholder="Drive Shift" require></text><br>
-<input type="text" id="drive_password" name="password" placeholder="Drive Passowrd" require></text><br>
-<button type="submit">Submit</button>
-</form>
-  </div>
-  <div class="columntbl" style="background-color:#bbb;">
-    <table id="drive_table" class="table table-bordered yajra-datatable" style="width:100% height=100% table-layout:fixed; font-size:18px">
-        <thead>
-            <tr>
-                <th>exam_name</th>
-                <th>exam_id</th>
-                <th>Drive_status</th>
-                <th>action</th>   
-                </tr>
-        </thead>
-        <tbody></tbody>
-        
-    </table>  </div>
-</div>
-  </div>
-<!--center code end-->
-
-
-<form action="upload" method="post" enctype="multipart/form-data">
-{{ csrf_field() }}
-
-</div>
-<br>
-<div id="drive_detail" class="card" style="width: 50rem;">
-<div>
- <input type="file"  name="file" required>
-
-<input type="text" id="drive_shift" name="shift" placeholder="Drive Shift" require></text>
-<input type="text" id="drive_password" name="password" placeholder="Drive Passowrd" require></text>
-<button id="start_drive_btn" onclick='start_drive()'>back_up</button>
-<button id="encr_btn" onclick='encrypt()'>encrypt</button>
-<button id="decr_btn" onclick='decrypt()'>decrypt Start drive</button>
-<br>
-<br>
-<br>
-<button type="submit">Submit</button>
-</div>
-</form>
-
-    @endsection    
+    @endsection
 </body>
 <script src="{{ asset('assets\js\jquery.min.js')}}"></script>
 <script src="{{ asset('assets\js\jquery.dataTables.min.js')}}"></script>
-
 
 <script type="text/javascript">
 $.ajaxSetup({
@@ -87,254 +59,173 @@ $.ajaxSetup({
     $(document).ready(function() {
       $('#drive_table').DataTable({
         bInfo : false,
-filter:false,
-paging:false,
- processing: true,
- serverSide: true,
- ajax: {
-  url: "{{ route('get_todays_drive.get') }}",
- },
- columns: [
-  {
-   data: 'exam_name',
-   name: 'exam_name'
-  },
-  {
-   data: 'exam_id',
-   name: 'exam_id'
-  },
-  
-  {
-   data: 'drive_status',
-   name: 'drive_status'
-  },
-  
-    {
-   data: 'action',
-   name: 'action',
-   orderable: false
-  }
-  
- ]
-});
-
+        filter:false,
+        paging:false,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('get_todays_drive.get') }}",
+        },
+        columns: [
+            { data: 'exam_name', name: 'exam_name' },
+            { data: 'exam_id', name: 'exam_id' },
+            { data: 'drive_status', name: 'drive_status' },
+            { data: 'action', name: 'action', orderable: false }
+        ]
+    });
     });
 
 function select_drive(drive_id)
 {
-  console.log("dtive id is :"+drive_id)
+    console.log("drive id is :"+drive_id)
+    $('#drive_detail').empty();
+    $('#drive_detail').append('<div class="card-header"><h3 class="card-title">Drive Details</h3></div><div class="card-body">');
 
-  $('#drive_detail').empty();
-
-  $.ajax({  //create an ajax request to display.php
+    $.ajax({
         type: "GET",
-        url: "select_drive/"+drive_id,       
+        url: "select_drive/"+drive_id,
         success: function (data) {
-          console.log("successful"+data["test_name"])
-        x=data.date;
-        $('#drive_detail').append("<table><th>exam_name</th><th>exam_id</th><th>shift</th><th>time_slot</th><th>Drive_status</th><th>Total Count</th><tr><td>"+data.exam_name+"</td><td id=\'drive_id_cell\'>"+data.exam_id+"</td><td>"+data.shift+"</td><td>"+data.time_slot+"</td><td>"+data.drive_status+"</td><td>"+data.total+"</td></tr></table>");
-if(data.drive_status=="Not Started"||data.drive_status=="0")
-{
-  $('#drive_detail').append("<br> <button onclick=\"set_drive()\">Set Question papers</button> ");
-}
+            $('#drive_detail .card-body').append(
+                '<table class="table table-bordered">' +
+                '<thead><tr><th>Exam Name</th><th>Exam ID</th><th>Shift</th><th>Time Slot</th><th>Drive Status</th><th>Total Count</th></tr></thead>' +
+                '<tbody><tr>' +
+                '<td>'+data.exam_name+'</td>' +
+                '<td id="drive_id_cell">'+data.exam_id+'</td>' +
+                '<td>'+data.shift+'</td>' +
+                '<td>'+data.time_slot+'</td>' +
+                '<td>'+data.drive_status+'</td>' +
+                '<td>'+data.total+'</td>' +
+                '</tr></tbody></table>'
+            );
 
-else if(data.drive_status=="Question Bank Set")
-{
-  $('#drive_detail').append("<br> drive is running ");
-  $('#drive_detail').append("<br> <button onclick=\"start_drive()\">Start Drive</button> ");
-}
-else if(data.drive_status=="running")
-{
-  $('#drive_detail').append("<br> drive is running ");
-  $('#drive_detail').append("<br> <button onclick=\"End_Drive()\">End Drive</button> ");
-}
-else if(data.drive_status=="Drive Ended")
-{
-  $('#drive_detail').append("<br> drive is ended ");
-  $('#drive_detail').append("<br> <button onclick=\"create_backup()\">Backup Drive</button> ");
+            if(data.drive_status=="Not Started"||data.drive_status=="0")
+            {
+                $('#drive_detail .card-body').append('<br><button class="btn btn-primary" onclick="set_drive()">Set Question papers</button>');
+            }
+            else if(data.drive_status=="Question Bank Set")
+            {
+                $('#drive_detail .card-body').append('<br><span class="badge badge-info">Drive is ready</span>');
+                $('#drive_detail .card-body').append('<br><button class="btn btn-success" onclick="start_drive()">Start Drive</button>');
+            }
+            else if(data.drive_status=="running")
+            {
+                $('#drive_detail .card-body').append('<br><span class="badge badge-success">Drive is running</span>');
+                $('#drive_detail .card-body').append('<br><button class="btn btn-danger" onclick="End_Drive()">End Drive</button>');
+            }
+            else if(data.drive_status=="Drive Ended")
+            {
+                $('#drive_detail .card-body').append('<br><span class="badge badge-warning">Drive is ended</span>');
+                $('#drive_detail .card-body').append('<br><button class="btn btn-primary" onclick="create_backup()">Backup Drive</button>');
+            }
+            else if(data.drive_status=="Backup Done")
+            {
+                $('#drive_detail .card-body').append('<br><span class="badge badge-info">Backup done</span>');
+                $('#drive_detail .card-body').append('<br><button class="btn btn-success" onclick="upload_and_finish()">Upload Drive</button>');
+            }
 
-
-}
-else if(data.drive_status=="Backup Done")
-{
-  $('#drive_detail').append("<br> drive is ended ");
-  $('#drive_detail').append("<br> <button onclick=\"upload_and_finish()\">Upload Drive</button> ");
-
-}
-
-
-       }
+            $('#drive_detail').append('</div>');
+        }
     });
-
 }
 
-
-//testcmd
-
-function download()
+function get_backup()
 {
-  window.open("https://ams.justbeamit.com:8443/download?token=hukrd","_self")
-
-
-}
-function myFunction() 
-{
-  var inputVal = document.getElementById("drive_otp").value;
-  alert(inputVal);
-  var link="http://localhost/drive_engine/public/drive/"+inputVal;
-  location.replace(link);
-  }
-
-  function get_backup()
-{  var drive_id=$("#drive_id_cell").text();
-
-$.ajax({  //create an ajax request to display.php
-
+    var drive_id=$("#drive_id_cell").text();
+    $.ajax({
         type: "GET",
-        url: "set_backup_bat/"+drive_id,       
+        url: "set_backup_bat/"+drive_id,
         success: function (data) {
-
             alert(data)
-    
-
-        } })
-}
-
-function encrypt()
-{
-  var inputVal = document.getElementById("drive_password").value;
-  document.getElementById("encr_btn").addEventListener("click", function(event){
-  event.preventDefault()
-});
-
-  $.ajax({  //create an ajax request to display.php
-        type: "GET",
-        url: "encrypt/"+inputVal,       
-        success: function (data) {
-
-            alert(data)
-    
-
-        } })
-
-}
-function decrypt()
-{
-  var pass = document.getElementById("drive_password").value;
-  var shift = document.getElementById("drive_shift").value;
-
-  $.ajax({  //create an ajax request to display.php
-        type: "GET",
-        url: "decrypt/"+pass+"/"+shift,       
-        success: function (data) {
-
-            alert(data)
-    
-
-        } })
-
-
+        }
+    })
 }
 
 function End_Drive()
 {
-  var drive_id=$("#drive_id_cell").text();
-  console.log(drive_id);
-         $.ajax({
-           type:'POST',
-           url:"{{ route('end_drive.post') }}",
-           data:{exam_id:drive_id,status:"Drive End"},
-           success:function(data){
+    var drive_id=$("#drive_id_cell").text();
+    console.log(drive_id);
+    $.ajax({
+        type:'POST',
+        url:"{{ route('end_drive.post') }}",
+        data:{exam_id:drive_id,status:"Drive End"},
+        success:function(data){
             select_drive(drive_id)
             $('#drive_table').DataTable().ajax.reload();
-
-              alert(data);
-           }
-        });
-       
+            alert(data);
+        }
+    });
 }
+
 function create_backup()
 {
-  get_backup();
-  var drive_id=$("#drive_id_cell").text();
-  console.log(drive_id);
-         $.ajax({
-           type:'POST',
-           url:"{{ route('create_backup.post') }}",
-           data:{exam_id:drive_id,status:"Backup Done"},
-           success:function(data){
+    get_backup();
+    var drive_id=$("#drive_id_cell").text();
+    console.log(drive_id);
+    $.ajax({
+        type:'POST',
+        url:"{{ route('create_backup.post') }}",
+        data:{exam_id:drive_id,status:"Backup Done"},
+        success:function(data){
             select_drive(drive_id)
             $('#drive_table').DataTable().ajax.reload();
-              alert(data);
-           }
-        });
-       
-
+            alert(data);
+        }
+    });
 }
+
 function upload_and_finish()
 {
-  var drive_id=$("#drive_id_cell").text();
-  console.log(drive_id);
-         $.ajax({
-           type:'POST',
-           url:"{{ route('start_selected_drive.post') }}",
-           data:{exam_id:drive_id,status:"Upload"},
-           success:function(data){
+    var drive_id=$("#drive_id_cell").text();
+    console.log(drive_id);
+    $.ajax({
+        type:'POST',
+        url:"{{ route('start_selected_drive.post') }}",
+        data:{exam_id:drive_id,status:"Upload"},
+        success:function(data){
             select_drive(drive_id)
             $('#drive_table').DataTable().ajax.reload();
-              alert(data);
-           }
-        });
-      
-
+            alert(data);
+        }
+    });
 }
-var i=1;
 
- function set_qp(set)
+function set_qp(set)
 {
-  alert("process started")
-  console.log(set)
-  var drive_id=$("#drive_id_cell").text();
-  console.log(drive_id);
-         $.ajax({
-           type:'POST',
-           url:"{{ route('shuffle_qp_sets.post') }}",
-           data:{exam_id:drive_id,status:"set_qp",set:set},
-           success:function(data){
-           alert(data);
+    alert("process started")
+    console.log(set)
+    var drive_id=$("#drive_id_cell").text();
+    console.log(drive_id);
+    $.ajax({
+        type:'POST',
+        url:"{{ route('shuffle_qp_sets.post') }}",
+        data:{exam_id:drive_id,status:"set_qp",set:set},
+        success:function(data){
+            alert(data);
             select_drive(drive_id)
-
-           }
-        });
-
-     
-
+        }
+    });
 }
+
 async function set_drive()
 {
-await set_qp(1);
+    await set_qp(1);
 }
+
 function start_drive()
 {
-
-  var drive_id=$("#drive_id_cell").text();
-  alert(drive_id)
-
-  console.log(drive_id);
-         $.ajax({
-           type:'POST',
-           url:"{{ route('start_drive.post') }}",
-           data:{exam_id:drive_id},
-           success:function(data){
+    var drive_id=$("#drive_id_cell").text();
+    alert(drive_id)
+    console.log(drive_id);
+    $.ajax({
+        type:'POST',
+        url:"{{ route('start_drive.post') }}",
+        data:{exam_id:drive_id},
+        success:function(data){
             $('#drive_table').DataTable().ajax.reload();
             select_drive(drive_id)
-
-           alert(data);
-
-           }
-        });
-
+            alert(data);
+        }
+    });
 }
-
 </script>
 </html>
